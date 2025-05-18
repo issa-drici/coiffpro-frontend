@@ -1,11 +1,5 @@
-import {
-    IconChartBar,
-    IconCirclePlusFilled,
-    IconEye,
-    IconMail,
-} from '@tabler/icons-react'
+import { IconEye } from '@tabler/icons-react'
 
-import { Button } from '@/components/ui/button'
 import {
     SidebarGroup,
     SidebarGroupContent,

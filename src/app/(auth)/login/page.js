@@ -1,5 +1,3 @@
-import { GalleryVerticalEnd } from 'lucide-react'
-
 import { LoginForm } from '@/components/login-form'
 import { IconRazorElectric } from '@tabler/icons-react'
 import Link from 'next/link'

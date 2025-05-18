@@ -27,6 +27,7 @@ export function RegisterForm({ className, ...props }) {
             password,
             password_confirmation: passwordConfirmation,
             setErrors,
+            errors,
         })
     }
     return (

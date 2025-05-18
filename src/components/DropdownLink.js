@@ -17,9 +17,7 @@ const DropdownLink = ({ children, ...props }) => (
 )
 
 export const DropdownButton = ({ children, ...props }) => (
-    <Menu.Item>
-        {({ active }) => <Button {...props}>{children}</Button>}
-    </Menu.Item>
+    <Menu.Item>{() => <Button {...props}>{children}</Button>}</Menu.Item>
 )
 
 export default DropdownLink

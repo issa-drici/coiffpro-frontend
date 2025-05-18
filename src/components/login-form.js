@@ -3,13 +3,10 @@
 import { cn } from '@/lib/utils'
 import { Input } from '@/components/ui/input'
 
-import InputError from '@/components/InputError'
 import Label from '@/components/Label'
-import Link from 'next/link'
 import { useAuth } from '@/hooks/auth'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import AuthSessionStatus from '@/app/(auth)/AuthSessionStatus'
 import { Button } from '@/components/ui/button'
 
 export function LoginForm({ className, ...props }) {
@@ -43,6 +40,7 @@ export function LoginForm({ className, ...props }) {
             remember: shouldRemember,
             setErrors,
             setStatus,
+            status,
         })
     }
     return (

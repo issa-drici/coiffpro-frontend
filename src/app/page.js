@@ -1,9 +1,5 @@
 'use client'
 
-import { IconRazorElectric } from '@tabler/icons-react'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
-
 // Import des composants de la landing page
 import Hero from '@/app/components/Hero'
 import Features from '@/app/components/Features'
@@ -54,29 +50,5 @@ const Home = () => {
         </div>
     )
 }
-
-// Carousel d'avis défilant automatiquement
-const reviews = [
-    {
-        name: 'Karim',
-        country: 'Paris',
-        text: "« Je garde mes habitudes, mais mes clients attendent moins. C'est simple, et ça ne change rien à ma façon de bosser. »",
-    },
-    {
-        name: 'Samia',
-        country: 'Lyon',
-        text: '« Avant, les gens râlaient dans la file. Maintenant, ils reviennent avec le sourire. »',
-    },
-    {
-        name: 'Ali',
-        country: 'Marseille',
-        text: '« Aucune paperasse, pas de carte, pas de stress. Je recommande à tous les coiffeurs de quartier. »',
-    },
-    {
-        name: 'Fatima',
-        country: 'Toulouse',
-        text: "« J'ai testé, c'est discret, rapide, et mes clients adorent. »",
-    },
-]
 
 export default Home

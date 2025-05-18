@@ -31,11 +31,6 @@ import {
     IconTrendingUp,
 } from '@tabler/icons-react'
 import {
-    ColumnDef,
-    ColumnFiltersState,
-    Row,
-    SortingState,
-    VisibilityState,
     flexRender,
     getCoreRowModel,
     getFacetedRowModel,
@@ -53,7 +48,6 @@ import { useIsMobile } from '@/hooks/use-mobile'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
-    ChartConfig,
     ChartContainer,
     ChartTooltip,
     ChartTooltipContent,
@@ -625,17 +619,17 @@ export function DataTable({ data: initialData }) {
             <TabsContent
                 value="past-performance"
                 className="flex flex-col px-4 lg:px-6">
-                <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
+                <div className="aspect-video w-full flex-1 rounded-lg border border-dashed" />
             </TabsContent>
             <TabsContent
                 value="key-personnel"
                 className="flex flex-col px-4 lg:px-6">
-                <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
+                <div className="aspect-video w-full flex-1 rounded-lg border border-dashed" />
             </TabsContent>
             <TabsContent
                 value="focus-documents"
                 className="flex flex-col px-4 lg:px-6">
-                <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
+                <div className="aspect-video w-full flex-1 rounded-lg border border-dashed" />
             </TabsContent>
         </Tabs>
     )
