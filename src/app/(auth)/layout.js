@@ -10,14 +10,14 @@ const Layout = ({ children }) => {
     return (
         <div>
             <div className="text-gray-900 antialiased">
-                <AuthCard
+                {/* <AuthCard
                     logo={
                         <Link href="/">
                             <ApplicationLogo className="w-20 h-20 fill-current text-gray-500" />
                         </Link>
-                    }>
+                    }> */}
                     {children}
-                </AuthCard>
+                {/* </AuthCard> */}
             </div>
         </div>
     )

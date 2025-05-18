@@ -2,6 +2,7 @@ import * as React from 'react'
 import {
     IconCamera,
     IconChartBar,
+    IconCut,
     IconDashboard,
     IconDatabase,
     IconFileAi,
@@ -11,6 +12,7 @@ import {
     IconHelp,
     IconInnerShadowTop,
     IconListDetails,
+    IconRazorElectric,
     IconReport,
     IconSearch,
     IconSettings,
@@ -31,6 +33,7 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar'
 import { useAuth } from '@/hooks/auth'
+import Link from 'next/link'
 
 const data = {
     user: {
@@ -45,25 +48,26 @@ const data = {
             icon: IconDashboard,
         },
         {
-            title: 'Lifecycle',
+            title: 'Prestations',
             url: '#',
             icon: IconListDetails,
         },
         {
-            title: 'Analytics',
+            title: "Liste d'attente",
             url: '#',
             icon: IconChartBar,
         },
         {
-            title: 'Projects',
+            title: 'Coiffeurs',
             url: '#',
-            icon: IconFolder,
+            icon: IconCut,
+            disabled: true,
         },
-        {
-            title: 'Team',
-            url: '#',
-            icon: IconUsers,
-        },
+        // {
+        //     title: 'Team',
+        //     url: '#',
+        //     icon: IconUsers,
+        // },
     ],
     navClouds: [
         {
@@ -115,38 +119,38 @@ const data = {
     ],
     navSecondary: [
         {
-            title: 'Settings',
+            title: 'Réglages',
             url: '#',
             icon: IconSettings,
         },
         {
-            title: 'Get Help',
+            title: 'Assistance',
             url: '#',
             icon: IconHelp,
         },
-        {
-            title: 'Search',
-            url: '#',
-            icon: IconSearch,
-        },
+        // {
+        //     title: 'Search',
+        //     url: '#',
+        //     icon: IconSearch,
+        // },
     ],
-    documents: [
-        {
-            name: 'Data Library',
-            url: '#',
-            icon: IconDatabase,
-        },
-        {
-            name: 'Reports',
-            url: '#',
-            icon: IconReport,
-        },
-        {
-            name: 'Word Assistant',
-            url: '#',
-            icon: IconFileWord,
-        },
-    ],
+    // documents: [
+    //     {
+    //         name: 'Data Library',
+    //         url: '#',
+    //         icon: IconDatabase,
+    //     },
+    //     {
+    //         name: 'Reports',
+    //         url: '#',
+    //         icon: IconReport,
+    //     },
+    //     {
+    //         name: 'Word Assistant',
+    //         url: '#',
+    //         icon: IconFileWord,
+    //     },
+    // ],
 }
 
 export function AppSidebar({ ...props }) {
@@ -160,19 +164,21 @@ export function AppSidebar({ ...props }) {
                         <SidebarMenuButton
                             asChild
                             className="data-[slot=sidebar-menu-button]:!p-1.5">
-                            <a href="#">
-                                <IconInnerShadowTop className="!size-5" />
+                            <Link href="/admin/dashboard">
+                                <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
+                                    <IconRazorElectric className="!size-5" />
+                                </div>
                                 <span className="text-base font-semibold">
-                                    Acme Inc.
+                                    CoiffPro
                                 </span>
-                            </a>
+                            </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarHeader>
             <SidebarContent>
                 <NavMain items={data.navMain} />
-                <NavDocuments items={data.documents} />
+                {/* <NavDocuments items={data.documents} /> */}
                 <NavSecondary items={data.navSecondary} className="mt-auto" />
             </SidebarContent>
             <SidebarFooter>

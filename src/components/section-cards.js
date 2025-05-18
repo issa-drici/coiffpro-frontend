@@ -15,7 +15,7 @@ export function SectionCards() {
         <div className="dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
             <Card className="@container/card">
                 <CardHeader>
-                    <CardDescription>Total Revenue</CardDescription>
+                    <CardDescription>Revenu Total</CardDescription>
                     <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
                         $1,250.00
                     </CardTitle>
@@ -28,17 +28,17 @@ export function SectionCards() {
                 </CardHeader>
                 <CardFooter className="flex-col items-start gap-1.5 text-sm">
                     <div className="line-clamp-1 flex gap-2 font-medium">
-                        Trending up this month{' '}
+                        En hausse ce mois-ci{' '}
                         <IconTrendingUp className="size-4" />
                     </div>
                     <div className="text-muted-foreground">
-                        Visitors for the last 6 months
+                        Visiteurs des 6 derniers mois
                     </div>
                 </CardFooter>
             </Card>
             <Card className="@container/card">
                 <CardHeader>
-                    <CardDescription>New Customers</CardDescription>
+                    <CardDescription>Nouveaux Clients</CardDescription>
                     <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
                         1,234
                     </CardTitle>
@@ -51,17 +51,17 @@ export function SectionCards() {
                 </CardHeader>
                 <CardFooter className="flex-col items-start gap-1.5 text-sm">
                     <div className="line-clamp-1 flex gap-2 font-medium">
-                        Down 20% this period{' '}
+                        Baisse de 20% cette période{' '}
                         <IconTrendingDown className="size-4" />
                     </div>
                     <div className="text-muted-foreground">
-                        Acquisition needs attention
+                        L'acquisition nécessite de l'attention
                     </div>
                 </CardFooter>
             </Card>
             <Card className="@container/card">
                 <CardHeader>
-                    <CardDescription>Active Accounts</CardDescription>
+                    <CardDescription>Comptes Actifs</CardDescription>
                     <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
                         45,678
                     </CardTitle>
@@ -74,17 +74,17 @@ export function SectionCards() {
                 </CardHeader>
                 <CardFooter className="flex-col items-start gap-1.5 text-sm">
                     <div className="line-clamp-1 flex gap-2 font-medium">
-                        Strong user retention{' '}
+                        Forte rétention des utilisateurs{' '}
                         <IconTrendingUp className="size-4" />
                     </div>
                     <div className="text-muted-foreground">
-                        Engagement exceed targets
+                        L'engagement dépasse les objectifs
                     </div>
                 </CardFooter>
             </Card>
             <Card className="@container/card">
                 <CardHeader>
-                    <CardDescription>Growth Rate</CardDescription>
+                    <CardDescription>Taux de Croissance</CardDescription>
                     <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
                         4.5%
                     </CardTitle>
@@ -97,11 +97,11 @@ export function SectionCards() {
                 </CardHeader>
                 <CardFooter className="flex-col items-start gap-1.5 text-sm">
                     <div className="line-clamp-1 flex gap-2 font-medium">
-                        Steady performance increase{' '}
+                        Augmentation constante des performances{' '}
                         <IconTrendingUp className="size-4" />
                     </div>
                     <div className="text-muted-foreground">
-                        Meets growth projections
+                        Correspond aux projections de croissance
                     </div>
                 </CardFooter>
             </Card>

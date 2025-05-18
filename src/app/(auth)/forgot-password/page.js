@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input'
 const Page = () => {
     const { forgotPassword } = useAuth({
         middleware: 'guest',
-        redirectIfAuthenticated: '/dashboard',
+        redirectIfAuthenticated: '/admin/dashboard',
     })
 
     const [email, setEmail] = useState('')

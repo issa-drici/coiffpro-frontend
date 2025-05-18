@@ -22,9 +22,11 @@ import {
     SidebarMenuItem,
     useSidebar,
 } from '@/components/ui/sidebar'
+import { useAuth } from '@/hooks/auth'
 
 export function NavUser({ user }) {
     const { isMobile } = useSidebar()
+    const { logout } = useAuth()
 
     return (
         <SidebarMenu>
@@ -84,21 +86,21 @@ export function NavUser({ user }) {
                         <DropdownMenuGroup>
                             <DropdownMenuItem>
                                 <IconUserCircle />
-                                Account
+                                Mon compte
                             </DropdownMenuItem>
                             <DropdownMenuItem>
                                 <IconCreditCard />
-                                Billing
+                                Paiement
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            {/* <DropdownMenuItem>
                                 <IconNotification />
                                 Notifications
-                            </DropdownMenuItem>
+                            </DropdownMenuItem> */}
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>
+                        <DropdownMenuItem onClick={logout}>
                             <IconLogout />
-                            Log out
+                            Se déconnecter
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
