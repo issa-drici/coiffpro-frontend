@@ -1,5 +1,6 @@
 import { useRef, useEffect } from 'react'
 import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card'
+import Image from 'next/image'
 
 const reviews = [
     {
@@ -60,7 +61,7 @@ const ReviewCarousel = () => {
             `}</style>
             {/* Effet blur gauche */}
             <div
-                className="pointer-events-none absolute top-0 left-0 h-full w-32 z-10"
+                className="pointer-events-none absolute top-0 left-0 h-full w-12 md:w-32 z-10"
                 style={{
                     background:
                         'linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,0.4) 60%, rgba(255,255,255,0) 100%)',
@@ -69,7 +70,7 @@ const ReviewCarousel = () => {
             />
             {/* Effet blur droit */}
             <div
-                className="pointer-events-none absolute top-0 right-0 h-full w-32 z-10"
+                className="pointer-events-none absolute top-0 right-0 h-full w-12 md:w-32 z-10"
                 style={{
                     background:
                         'linear-gradient(to left, rgba(255,255,255,1) 0%, rgba(255,255,255,0.4) 60%, rgba(255,255,255,0) 100%)',
@@ -107,7 +108,15 @@ const ReviewCarousel = () => {
                             </p>
                         </CardContent>
                         <CardFooter className="flex items-center gap-4 p-0 mt-2">
-                            <div className="w-10 h-10 bg-white border border-gray-300 rounded-full" />
+                            <div className="w-10 h-10 relative rounded-full overflow-hidden">
+                                <Image
+                                    src="/images/gkcoiff.jpg"
+                                    alt="Photo de profil"
+                                    fill
+                                    className="object-cover"
+                                    sizes="40px"
+                                />
+                            </div>
                             <div>
                                 <div className="font-bold text-lg text-gray-900 leading-tight">
                                     {review.name}

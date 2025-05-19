@@ -20,8 +20,8 @@ const HowItWorks = () => {
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="flex-1 flex items-end p-0">
-                        <div className="w-full h-32 bg-white rounded-xl border border-gray-200 flex items-center justify-center text-3xl text-gray-300">
-                            <span>📱</span>
+                        <div className="w-full h-20 bg-white flex items-center justify-center text-3xl text-gray-300">
+                            <span className="text-4xl">📱</span>
                         </div>
                     </CardContent>
                 </Card>
@@ -36,8 +36,8 @@ const HowItWorks = () => {
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="flex-1 flex items-end p-0">
-                        <div className="w-full h-32 bg-white rounded-xl border border-gray-200 flex items-center justify-center text-3xl text-gray-300">
-                            <span>📝</span>
+                        <div className="w-full h-20 bg-white flex items-center justify-center text-3xl text-gray-300">
+                            <span className="text-4xl">📝</span>
                         </div>
                     </CardContent>
                 </Card>
@@ -52,8 +52,8 @@ const HowItWorks = () => {
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="flex-1 flex items-end p-0">
-                        <div className="w-full h-32 bg-white rounded-xl border border-gray-200 flex items-center justify-center text-3xl text-gray-300">
-                            <span>✂️</span>
+                        <div className="w-full h-20 bg-white flex items-center justify-center text-3xl text-gray-300">
+                            <span className="text-4xl">✂️</span>
                         </div>
                     </CardContent>
                 </Card>

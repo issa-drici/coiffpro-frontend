@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import Image from 'next/image'
 
 const Hero = () => {
     return (
@@ -8,10 +9,10 @@ const Hero = () => {
             <div className="flex mb-6">
                 <div className="flex items-center bg-gray-100 rounded-full pl-2 pr-6 py-1 text-sm font-medium shadow-sm">
                     <span className="text-gray-700 mr-4 bg-white px-4 font-bold py-1 rounded-full">
-                        Garantie
+                        Offert
                     </span>
                     <span className="text-gray-600 flex items-center">
-                        Satisfait ou remboursé pendant 30 jours{' '}
+                        Essai gratuit pendant 14 jours{' '}
                         <span className="ml-2">→</span>
                     </span>
                 </div>
@@ -37,9 +38,17 @@ const Hero = () => {
                 <Button variant="outline">Voir la démo</Button>
             </div>
             {/* Bloc démo */}
-            <div className="w-full max-w-5xl h-64 bg-gray-100 rounded-2xl flex items-center justify-center mb-8" />
+            <div className="w-full max-w-5xl h-[250px] md:h-[500px] bg-gray-100 rounded-2xl relative overflow-hidden">
+                <Image
+                    src="/images/bg-login.avif"
+                    alt="Hero illustration"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 80vw"
+                />
+            </div>
             {/* Ligne logos partenaires */}
-            <div className="w-full max-w-5xl flex flex-col md:flex-row items-center justify-between gap-4 mt-2">
+            <div className="w-full max-w-5xl flex flex-col md:flex-row items-center justify-between gap-4 mt-12">
                 <div className="text-xs text-gray-700 font-medium md:text-left text-center md:mb-0 mb-2">
                     PLUS DE 500 SALONS DE COIFFURE NOUS FONT CONFIANCE EN
                     FRANCE
@@ -48,8 +57,16 @@ const Hero = () => {
                     {[1, 2, 3, 4].map(i => (
                         <div
                             key={i}
-                            className="w-24 h-8 bg-gray-200 rounded"
-                        />
+                            className="w-16 h-16 relative"
+                        >
+                            <Image
+                                src="/images/gkcoiff.jpg"
+                                alt="Logo partenaire"
+                                fill
+                                className="object-contain"
+                                sizes="96px"
+                            />
+                        </div>
                     ))}
                 </div>
             </div>
