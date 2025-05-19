@@ -1,5 +1,6 @@
 import { LoginForm } from '@/components/login-form'
 import { IconRazorElectric } from '@tabler/icons-react'
+import Image from 'next/image'
 import Link from 'next/link'
 
 export default function LoginPage() {
@@ -23,9 +24,10 @@ export default function LoginPage() {
                 </div>
             </div>
             <div className="relative hidden bg-muted lg:block">
-                <img
+                <Image
                     src="/images/bg-login.avif"
                     alt="Image"
+                    fill
                     className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
                 />
             </div>

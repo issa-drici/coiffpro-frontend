@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card'
+import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 import Image from 'next/image'
 
 const CTA = () => {
@@ -16,21 +16,37 @@ const CTA = () => {
                         </CardHeader>
                         <div className="flex flex-col gap-3 mb-6 w-full max-w-md">
                             <div className="flex items-center gap-2">
-                                <span className="text-green-500 text-lg">✓</span>
-                                <span className="text-gray-700">7 jours d'essai gratuit</span>
+                                <span className="text-green-500 text-lg">
+                                    ✓
+                                </span>
+                                <span className="text-gray-700">
+                                    7 jours d'essai gratuit
+                                </span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <span className="text-green-500 text-lg">✓</span>
-                                <span className="text-gray-700">Aucune carte bancaire demandée</span>
+                                <span className="text-green-500 text-lg">
+                                    ✓
+                                </span>
+                                <span className="text-gray-700">
+                                    Aucune carte bancaire demandée
+                                </span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <span className="text-green-500 text-lg">✓</span>
-                                <span className="text-gray-700">Arrêt en un clic si ça ne vous convient pas</span>
+                                <span className="text-green-500 text-lg">
+                                    ✓
+                                </span>
+                                <span className="text-gray-700">
+                                    Arrêt en un clic si ça ne vous convient pas
+                                </span>
                             </div>
                         </div>
                         <div className="flex flex-col items-start gap-4 mt-auto">
-                            <Button className="w-full md:w-auto">Commencer l'essai gratuit →</Button>
-                            <p className="text-sm text-gray-500">Déjà plus de 500 coiffeurs nous font confiance</p>
+                            <Button className="w-full md:w-auto">
+                                Commencer l'essai gratuit →
+                            </Button>
+                            <p className="text-sm text-gray-500">
+                                Déjà plus de 500 coiffeurs nous font confiance
+                            </p>
                         </div>
                     </div>
 
