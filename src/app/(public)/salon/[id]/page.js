@@ -5,7 +5,7 @@ export default function SalonRegistrationPage({ params }) {
         <main className="min-h-screen bg-background">
             {/* En-tête fixe sur mobile, normal sur desktop */}
             <header className="sticky top-0 z-10 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                <div className="container px-4 py-4 md:py-6 md:max-w-6xl">
+                <div className="container px-4 py-4 md:py-6 md:max-w-6xl mx-auto">
                     <div className="md:flex md:items-center md:justify-between">
                         <div>
                             <h1 className="text-xl font-bold md:text-2xl">
@@ -28,7 +28,7 @@ export default function SalonRegistrationPage({ params }) {
             </header>
 
             {/* Contenu principal avec mise en page adaptative */}
-            <div className="container px-4 py-6 md:py-8 md:max-w-6xl">
+            <div className="container px-4 py-6 md:py-8 md:max-w-7xl mx-auto">
                 <div className="md:flex md:justify-center">
                     {/* Message d'introduction visible uniquement sur mobile */}
                     <p className="text-sm text-muted-foreground md:hidden mb-4">
@@ -37,7 +37,7 @@ export default function SalonRegistrationPage({ params }) {
                     </p>
 
                     {/* Carte du formulaire avec ombre adaptative */}
-                    <div className="w-full md:max-w-4xl md:mx-auto">
+                    <div className="w-full md:max-w-6xl md:mx-auto">
                         <div className="rounded-lg border bg-card p-4 shadow-sm md:border-0 md:shadow-none md:p-0">
                             <RegistrationForm salonId={params.id} />
                         </div>
