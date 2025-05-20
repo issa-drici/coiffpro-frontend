@@ -1,0 +1,41 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Structure du Projet EatsUp Frontend
+
+Ce projet est une application Next.js moderne utilisant JavaScript, Tailwind CSS et shadcn/ui.
+
+## Organisation des Dossiers
+
+- `src/app/` : Contient les routes et les pages de l'application (architecture App Router de Next.js)
+- `src/components/` : Composants réutilisables spécifiques à l'application
+- `src/ui/` : Composants UI de base et composants shadcn/ui
+- `src/utils/` : Fonctions utilitaires et helpers
+- `src/services/` : Services pour l'interaction avec l'API et les services externes
+- `src/hooks/` : Hooks React personnalisés
+- `src/lib/` : Bibliothèques et configurations
+- `src/providers/` : Providers React pour le contexte global
+- `src/middleware.js` : Middleware Next.js pour la gestion des routes et l'authentification
+
+## Points d'Entrée Principaux
+
+- Le point d'entrée principal de l'application est [src/app/page.js](mdc:src/app/page.js)
+- La configuration de l'application se trouve dans [next.config.js](mdc:next.config.js)
+- Les styles globaux sont définis dans [src/app/globals.css](mdc:src/app/globals.css)
+
+## Configuration
+
+- Configuration Tailwind : [tailwind.config.js](mdc:tailwind.config.js)
+- Configuration ESLint : [.eslintrc.js](mdc:.eslintrc.js)
+- Configuration Prettier : [.prettierrc.json](mdc:.prettierrc.json)
+
+## Bonnes Pratiques
+
+1. Les composants doivent être placés dans le dossier approprié selon leur usage :
+   - Composants UI réutilisables → `src/shadcn-components/ui/`
+   - Composants spécifiques à l'application → `src/components/`
+2. Les services API doivent être placés dans `src/services/`
+3. Les hooks personnalisés doivent être placés dans `src/hooks/`
+4. Les utilitaires généraux doivent être placés dans `src/utils/`

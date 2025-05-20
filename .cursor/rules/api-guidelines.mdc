@@ -1,0 +1,149 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Guide des API et Services EatsUp Frontend
+
+## Organisation des Services
+
+### Structure des Dossiers
+- `src/services/api/` : Configuration de base de l'API (axios, intercepteurs, etc.)
+- `src/services/endpoints/` : Définition des endpoints par domaine
+- `src/services/hooks/` : Hooks personnalisés pour l'utilisation des services
+
+## Configuration de l'API
+
+### Configuration Axios
+```javascript
+// src/services/api/config.js
+import axios from 'axios'
+
+const api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
+
+// Intercepteur pour les requêtes
+api.interceptors.request.use((config) => {
+  // Ajout du token d'authentification
+  const token = localStorage.getItem('token')
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
+})
+
+// Intercepteur pour les réponses
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    // Gestion des erreurs globales
+    if (error.response?.status === 401) {
+      // Redirection vers la page de login
+    }
+    return Promise.reject(error)
+  }
+)
+
+export default api
+```
+
+## Organisation des Endpoints
+
+### Structure des Fichiers
+```javascript
+// src/services/endpoints/auth.js
+import api from '../api/config'
+
+export const authService = {
+  login: (credentials) => api.post('/auth/login', credentials),
+  register: (userData) => api.post('/auth/register', userData),
+  logout: () => api.post('/auth/logout'),
+  // ...
+}
+
+// src/services/endpoints/restaurants.js
+import api from '../api/config'
+
+export const restaurantService = {
+  getAll: (params) => api.get('/restaurants', { params }),
+  getById: (id) => api.get(`/restaurants/${id}`),
+  // ...
+}
+```
+
+## Hooks Personnalisés
+
+### Exemple d'Utilisation
+```javascript
+// src/services/hooks/useRestaurants.js
+import { useState, useEffect } from 'react'
+import { restaurantService } from '../endpoints/restaurants'
+
+export const useRestaurants = (params) => {
+  const [restaurants, setRestaurants] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    const fetchRestaurants = async () => {
+      try {
+        const response = await restaurantService.getAll(params)
+        setRestaurants(response.data)
+      } catch (err) {
+        setError(err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchRestaurants()
+  }, [params])
+
+  return { restaurants, loading, error }
+}
+```
+
+## Bonnes Pratiques
+
+### Gestion des Requêtes
+- Utiliser des timeouts appropriés pour toutes les requêtes
+- Implémenter un système de retry pour les requêtes importantes
+- Mettre en cache les réponses quand c'est approprié
+- Utiliser la pagination pour les grandes listes de données
+
+### Gestion des Erreurs
+- Créer des messages d'erreur spécifiques pour chaque type d'erreur
+- Logger les erreurs de manière appropriée
+- Gérer les cas d'erreur réseau
+- Implémenter un système de fallback pour les données critiques
+
+### Performance
+- Utiliser la mise en cache côté client quand c'est possible
+- Implémenter le lazy loading pour les données non critiques
+- Optimiser la taille des payloads
+- Utiliser la compression quand c'est possible
+
+### Sécurité
+- Ne jamais stocker les tokens dans le localStorage (utiliser des cookies sécurisés)
+- Valider toutes les données entrantes
+- Implémenter la protection CSRF
+- Utiliser HTTPS pour toutes les requêtes
+
+## Tests
+
+### Tests des Services
+- Tester chaque endpoint individuellement
+- Tester les cas d'erreur
+- Tester les intercepteurs
+- Mocker les réponses API pour les tests
+
+### Tests des Hooks
+- Tester les différents états (loading, error, success)
+- Tester la gestion des erreurs
+- Tester les mises à jour de données
+- Tester les cas limites

@@ -1,3 +1,5 @@
+'use client'
+
 import { cn } from '@/lib/utils'
 import { Input } from '@/components/ui/input'
 
@@ -5,6 +7,7 @@ import Label from '@/components/Label'
 import { useAuth } from '@/hooks/auth'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 
 export function RegisterForm({ className, ...props }) {
     const { register } = useAuth({
@@ -12,24 +15,36 @@ export function RegisterForm({ className, ...props }) {
         redirectIfAuthenticated: '/admin/dashboard',
     })
 
+    const searchParams = useSearchParams()
+
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [passwordConfirmation, setPasswordConfirmation] = useState('')
     const [errors, setErrors] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
 
-    const submitForm = event => {
+    const submitForm = async event => {
         event.preventDefault()
-
-        register({
-            name,
-            email,
-            password,
-            password_confirmation: passwordConfirmation,
-            setErrors,
-            errors,
-        })
+        setIsLoading(true)
+        try {
+            await register({
+                name,
+                email,
+                password,
+                password_confirmation: passwordConfirmation,
+                user_plan: searchParams.get('user_plan') ?? 'basic',
+                setErrors,
+            })
+        } catch (error) {
+            setErrors(error.response.data.errors)
+        } finally {
+            /* eslint-disable no-console */
+            console.log(errors)
+            setIsLoading(false)
+        }
     }
+
     return (
         <form
             className={cn('flex flex-col gap-6', className)}
@@ -91,7 +106,7 @@ export function RegisterForm({ className, ...props }) {
                     />
                 </div>
 
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full" isLoading={isLoading}>
                     Créer un compte
                 </Button>
                 {/* <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">

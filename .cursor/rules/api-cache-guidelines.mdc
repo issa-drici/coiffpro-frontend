@@ -1,0 +1,132 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Guide de Gestion des Requêtes API et du Cache EatsUp
+
+## Configuration du Client Query
+
+### Configuration Globale
+```javascript
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            staleTime: 1000 * 60 * 5,  // 5 minutes
+            cacheTime: 1000 * 60 * 10, // 10 minutes
+            retry: 2,                  // 2 tentatives
+        },
+    },
+})
+```
+
+### Bonnes Pratiques
+- Utiliser des clés de cache cohérentes
+- Gérer les états de chargement
+- Implémenter la gestion des erreurs
+- Invalider le cache après les mutations
+
+## Structure des Hooks
+
+### Hook de Requête Simple
+```javascript
+export const useFind[Resource] = (params) => {
+    const { data, isLoading, isFetching } = useQuery({
+        queryKey: ['[resource]', params],
+        queryFn: () => get[Resource](mdc:params),
+        enabled: !!params,
+    })
+
+    return {
+        data: data?.data,
+        isLoading,
+        isFetching
+    }
+}
+```
+
+### Hook de Mutation
+```javascript
+export const use[Action][Resource] = (options = {}) => {
+    const { withToast = true } = options
+    const toast = useToast()
+
+    return useMutation({
+        mutationFn: (data) => [action][Resource](mdc:data),
+        onSuccess: async (response, variables, context) => {
+            if (withToast) {
+                toast({
+                    title: 'Succès',
+                    description: 'Opération réussie',
+                })
+            }
+            await handleCallbackSuccess?.(response, variables, context)
+        },
+        onError: async error => {
+            toast({
+                title: 'Une erreur est survenue',
+                description: error?.response?.data?.message,
+                variant: 'destructive',
+            })
+        },
+    })
+}
+```
+
+## Gestion du Cache
+
+### Invalidation
+- Invalider les requêtes liées après une mutation
+- Utiliser des clés de cache cohérentes
+- Gérer les dépendances entre les requêtes
+
+### Optimistic Updates
+- Mettre à jour le cache immédiatement
+- Gérer les rollbacks en cas d'erreur
+- Maintenir la cohérence des données
+
+## Bonnes Pratiques
+
+### Organisation
+- Placer les hooks dans `src/services/[domaine]/`
+- Nommer les hooks de manière cohérente
+- Documenter les paramètres avec JSDoc
+- Gérer les états de chargement et d'erreur
+
+### Performance
+- Utiliser `keepPreviousData` pour les requêtes paginées
+- Implémenter la mise en cache appropriée
+- Gérer les requêtes conditionnelles
+- Optimiser les re-rendus
+
+### Sécurité
+- Valider les paramètres d'entrée
+- Gérer les tokens d'authentification
+- Implémenter la gestion des erreurs
+- Protéger contre les attaques CSRF
+
+## Exemples d'Utilisation
+
+### Requête avec Paramètres
+```javascript
+const { data, isLoading } = useFindMenuInfosHomeByRestaurantId(restaurantId)
+```
+
+### Mutation avec Toast
+```javascript
+const { mutate } = useCreateMenuCategory({
+    withToast: true,
+    onSuccess: () => {
+        // Actions supplémentaires
+    }
+})
+```
+
+### Requête Conditionnelle
+```javascript
+const { data } = useQuery({
+    queryKey: ['resource', id],
+    queryFn: () => getResource(id),
+    enabled: !!id && isAuthenticated
+})
+```

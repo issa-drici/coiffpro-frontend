@@ -1,19 +1,16 @@
+import { Suspense } from 'react'
+
 export const metadata = {
-    title: 'Laravel',
+    title: "Coiffpro - Liste d'attente salon de coiffure",
 }
 
 const Layout = ({ children }) => {
     return (
         <div>
             <div className="text-gray-900 antialiased">
-                {/* <AuthCard
-                    logo={
-                        <Link href="/">
-                            <ApplicationLogo className="w-20 h-20 fill-current text-gray-500" />
-                        </Link>
-                    }> */}
+                <Suspense fallback={<div>Chargement...</div>}>
                     {children}
-                {/* </AuthCard> */}
+                </Suspense>
             </div>
         </div>
     )

@@ -1,19 +1,27 @@
 import useSWR from 'swr'
 import axios from '@/lib/axios'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 
 export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
     const router = useRouter()
     const params = useParams()
+    const [isLoading, setIsLoading] = useState(true)
 
-    const { data: user, error, mutate } = useSWR('/api/user', () =>
+    const {
+        data: user,
+        error,
+        mutate,
+    } = useSWR('/api/user', () =>
         axios
             .get('/api/user')
-            .then(res => res.data)
+            .then(res => {
+                setIsLoading(false)
+                return res.data
+            })
             .catch(error => {
+                setIsLoading(false)
                 if (error.response.status !== 409) throw error
-
                 router.push('/verify-email')
             }),
     )
@@ -100,17 +108,29 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
     }
 
     useEffect(() => {
-        if (middleware === 'guest' && redirectIfAuthenticated && user)
-            router.push(redirectIfAuthenticated)
+        if (middleware === 'guest' && redirectIfAuthenticated && user) {
+            if (user.role === 'admin') {
+                router.push('/superadmin/dashboard')
+            } else {
+                router.push(redirectIfAuthenticated)
+            }
+        }
 
-        // if (middleware === 'auth' && (user && !user.email_verified_at))
-        //     router.push('/verify-email')
-        
-        // if (
-        //     window.location.pathname === '/verify-email' &&
-        //     user?.email_verified_at
-        // )
-        //     router.push(redirectIfAuthenticated)
+        if (middleware === 'auth' && user && !user.email_verified_at) {
+            router.push('/verify-email')
+        }
+
+        if (
+            window.location.pathname === '/verify-email' &&
+            user?.email_verified_at
+        ) {
+            if (user.role === 'admin') {
+                router.push('/superadmin/dashboard')
+            } else {
+                router.push(redirectIfAuthenticated)
+            }
+        }
+
         if (middleware === 'auth' && error) logout()
     }, [user, error])
 
@@ -122,5 +142,6 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
         resetPassword,
         resendEmailVerification,
         logout,
+        isLoading,
     }
 }

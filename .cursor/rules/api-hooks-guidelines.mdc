@@ -1,0 +1,306 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Guide des Hooks API EatsUp Frontend
+
+## Structure des Requêtes API
+
+### Organisation des Endpoints
+- Les fonctions de requête API sont définies dans `src/utils/api-requests.js`
+- Chaque fonction est documentée avec JSDoc
+- Les endpoints sont organisés par domaine (menus, restaurants, etc.)
+
+```javascript
+// src/utils/api-requests.js
+import axios from '@/lib/axios'
+
+/**
+ * Récupère un restaurant par son ID
+ * @param {string} restaurantId - ID du restaurant
+ */
+export async function getRestaurantById(restaurantId) {
+    const response = await axios.get(`/api/restaurant/${restaurantId}`)
+    return response.data
+}
+
+/**
+ * Crée une nouvelle catégorie dans un menu
+ * @param {object} data - Données de la catégorie
+ * @param {string} menuId - ID du menu
+ */
+export async function postCreateMenuCategory(data, menuId) {
+    const response = await axios.post(
+        `/api/menu/${menuId}/menuCategory/create`,
+        data,
+    )
+    return response.data
+}
+
+/**
+ * Met à jour une catégorie de menu
+ * @param {object} data - Données de la catégorie
+ * @param {string} categoryId - ID de la catégorie
+ */
+export async function putUpdateMenuCategory(data, categoryId) {
+    const response = await axios.put(
+        `/api/menuCategory/${categoryId}/update`,
+        data,
+    )
+    return response.data
+}
+
+/**
+ * Supprime une catégorie de menu
+ * @param {string} menuCategoryId - ID de la catégorie
+ */
+export async function deleteMenuCategoryById(menuCategoryId) {
+    const response = await axios.delete(
+        `/api/menuCategory/${menuCategoryId}/delete`,
+    )
+    return response.data
+}
+```
+
+## Structure des Hooks
+
+### Hooks de Requête (useQuery)
+- Utiliser `@tanstack/react-query` pour la gestion des requêtes
+- Les hooks sont placés dans `src/services/[domaine]/`
+- Suivre la convention de nommage `useFind[Resource]` ou `useFindAll[Resource]`
+- Retourner toujours `{ data, isLoading, isFetching }`
+
+```javascript
+// src/services/restaurant/useFindRestaurantById.js
+'use client'
+
+import { getRestaurantById } from '@/utils/api-requests'
+import { useQuery } from '@tanstack/react-query'
+
+export const useFindRestaurantById = (restaurantId) => {
+    const { data, isLoading, isFetching } = useQuery({
+        queryKey: ['restaurant', restaurantId],
+        queryFn: () => getRestaurantById(restaurantId),
+        enabled: !!restaurantId,
+    })
+
+    const restaurant = data?.data
+
+    return { data: restaurant, isLoading, isFetching }
+}
+```
+
+### Hooks de Création (useCreate)
+- Utiliser `useMutation` de `@tanstack/react-query`
+- Suivre la convention de nommage `useCreate[Resource]`
+- Gérer les callbacks de succès et d'erreur
+- Utiliser le hook `useToast` pour les notifications
+
+```javascript
+// src/services/menu-category/useCreateMenuCategory.js
+'use client'
+
+import { useToast } from '@/hooks/use-toast'
+import { postCreateMenuCategory } from '@/utils/api-requests'
+import { useMutation } from '@tanstack/react-query'
+
+export const useCreateMenuCategory = ({ handleCallbackSuccess, menuId }) => {
+    const { toast } = useToast()
+
+    return useMutation({
+        mutationFn: data => postCreateMenuCategory(data, menuId),
+        onSuccess: async () => {
+            if (handleCallbackSuccess !== undefined) {
+                handleCallbackSuccess()
+            }
+            return true
+        },
+        onError: async error => {
+            toast({
+                title: 'Une erreur est survenue',
+                description: error?.response?.data?.message,
+            })
+            return false
+        },
+    })
+}
+```
+
+### Hooks de Mise à Jour (useUpdate)
+- Utiliser `useMutation` avec gestion des callbacks
+- Suivre la convention de nommage `useUpdate[Resource]`
+- Gérer les notifications de succès/erreur
+- Option pour activer/désactiver les toasts
+
+```javascript
+// src/services/restaurant/useUpdateRestaurant.js
+import { useToast } from '@/hooks/use-toast'
+import { postUpdateRestaurant } from '@/utils/api-requests'
+import { useMutation } from '@tanstack/react-query'
+
+export const useUpdateRestaurant = ({
+    handleCallbackSuccess,
+    restaurantId,
+    withToast = false,
+}) => {
+    const { toast } = useToast()
+
+    return useMutation({
+        mutationFn: data => postUpdateRestaurant(data, restaurantId),
+        onSuccess: async () => {
+            if (handleCallbackSuccess !== undefined) {
+                handleCallbackSuccess()
+            }
+            if (withToast) {
+                toast({
+                    title: 'Restaurant mis à jour avec succès',
+                })
+            }
+            return true
+        },
+        onError: async error => {
+            toast({
+                title: 'Une erreur est survenue',
+                description: error?.response?.data?.message,
+                variant: 'destructive',
+            })
+            return false
+        },
+    })
+}
+```
+
+### Hooks de Suppression (useDelete)
+- Utiliser `useMutation` avec gestion des callbacks
+- Suivre la convention de nommage `useDelete[Resource]`
+- Toujours afficher une confirmation de suppression
+- Gérer les notifications de succès/erreur
+
+```javascript
+// src/services/menu-item/useDeleteMenuItemById.js
+import { useToast } from '@/hooks/use-toast'
+import { deleteMenuItemById } from '@/utils/api-requests'
+import { useMutation } from '@tanstack/react-query'
+
+export const useDeleteMenuItemById = ({ handleCallbackSuccess }) => {
+    const { toast } = useToast()
+
+    return useMutation({
+        mutationFn: menuItemId => deleteMenuItemById(menuItemId),
+        onSuccess: async () => {
+            if (handleCallbackSuccess !== undefined) {
+                handleCallbackSuccess()
+            }
+            toast({
+                title: 'Article supprimé avec succès',
+                description: "L'article a été supprimé de votre menu",
+            })
+            return true
+        },
+        onError: async error => {
+            toast({
+                title: 'Une erreur est survenue',
+                description: error?.response?.data?.message,
+                variant: 'destructive',
+            })
+            return false
+        },
+    })
+}
+```
+
+## Bonnes Pratiques
+
+### Organisation des Fichiers
+- Placer les hooks dans des dossiers par domaine : `src/services/[domaine]/`
+- Nommer les fichiers selon le pattern : `use[Action][Resource].js`
+- Ajouter 'use client' pour les composants client-side
+
+### Structure des Hooks
+- Utiliser `useQuery` pour les requêtes GET
+- Utiliser `useMutation` pour les requêtes POST/PUT/DELETE
+- Toujours extraire `data.data` pour les réponses API
+- Utiliser `enabled` pour conditionner l'exécution des requêtes
+- Utiliser des queryKeys descriptifs
+
+### Gestion des Paramètres
+- Passer les paramètres de requête dans un objet
+- Utiliser URLSearchParams pour les requêtes avec paramètres
+- Documenter les paramètres avec JSDoc
+
+### Gestion des Erreurs
+- Utiliser le hook `useToast` pour les notifications
+- Gérer les erreurs de manière cohérente dans les mutations
+- Afficher les messages d'erreur du backend quand disponibles
+- Utiliser le variant 'destructive' pour les erreurs
+
+### Cache et Revalidation
+- Utiliser les queryKeys appropriés pour le cache
+- Utiliser `keepPreviousData` pour la pagination
+- Laisser React Query gérer la revalidation automatique
+
+## Exemples d'Utilisation
+
+### Requête Simple
+```javascript
+const { data: restaurant, isLoading } = useFindRestaurantById(restaurantId)
+```
+
+### Requête avec Paramètres
+```javascript
+const { data: restaurants, meta, isLoading } = useFindAllRestaurants({
+    name: searchTerm,
+    page: currentPage,
+    perPage: 10
+})
+```
+
+### Création
+```javascript
+const { mutate: createCategory, isLoading } = useCreateMenuCategory({
+    menuId,
+    handleCallbackSuccess: () => {
+        // Rafraîchir la liste des catégories
+    }
+})
+
+// Utilisation
+createCategory({
+    name: 'Nouvelle catégorie',
+    description: 'Description de la catégorie'
+})
+```
+
+### Mise à Jour
+```javascript
+const { mutate: updateRestaurant, isLoading } = useUpdateRestaurant({
+    restaurantId,
+    withToast: true,
+    handleCallbackSuccess: () => {
+        // Rafraîchir les données du restaurant
+    }
+})
+
+// Utilisation
+updateRestaurant({
+    name: 'Nouveau nom',
+    address: 'Nouvelle adresse'
+})
+```
+
+### Suppression
+```javascript
+const { mutate: deleteItem, isLoading } = useDeleteMenuItemById({
+    handleCallbackSuccess: () => {
+        // Rafraîchir la liste des items
+    }
+})
+
+// Utilisation avec confirmation
+const handleDelete = (itemId) => {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cet article ?')) {
+        deleteItem(itemId)
+    }
+}
+```

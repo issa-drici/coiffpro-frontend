@@ -1,0 +1,133 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Conventions de Code EatsUp Frontend
+
+## Nommage
+
+### Fichiers et Dossiers
+- Utiliser le kebab-case pour les noms de fichiers et dossiers : `user-profile.js`, `auth-service.js`
+- Les composants React doivent utiliser le PascalCase : `UserProfile.js`, `AuthService.js`
+- Les hooks personnalisés doivent suivre le pattern `use[Action][Resource].js` : `useFindRestaurantById.js`, `useUpdateMenuItem.js`
+
+### Variables et Fonctions
+- Utiliser le camelCase pour les variables et fonctions : `userData`, `handleSubmit`
+- Les fonctions de requête API doivent suivre le pattern `[method][Action][Resource]` : `getRestaurantById`, `postCreateMenuCategory`
+- Utiliser JSDoc pour documenter les paramètres des fonctions API
+
+## Structure des Composants
+
+### Organisation du Code
+```javascript
+// 1. Imports
+'use client' // Pour les composants client-side
+import { useState, useEffect } from 'react'
+import { useRouter, useParams } from 'next/navigation'
+
+// 2. Composant
+const ComponentName = () => {
+    // 3. Hooks et États
+    const router = useRouter()
+    const params = useParams()
+    const [state, setState] = useState()
+    const [errors, setErrors] = useState([])
+
+    // 4. Hooks personnalisés
+    const { data, isLoading } = useFindResource()
+
+    // 5. Effets
+    useEffect(() => {
+        // ...
+    }, [])
+
+    // 6. Handlers
+    const handleSubmit = async (event) => {
+        event.preventDefault()
+        // ...
+    }
+
+    // 7. Rendu conditionnel pour le chargement
+    if (isLoading) {
+        return <Loading />
+    }
+
+    // 8. Rendu principal
+    return (
+        // ...
+    )
+}
+
+export default ComponentName
+```
+
+## Styles
+
+- Utiliser Tailwind CSS comme framework de style principal
+- Utiliser les classes utilitaires de Tailwind directement dans les composants
+- Suivre la convention de responsive design avec les préfixes `md:`, `lg:`, etc.
+- Utiliser les composants shadcn/ui pour les éléments d'interface communs
+
+## Gestion d'État
+
+- Utiliser `@tanstack/react-query` pour la gestion des requêtes et du cache
+- Utiliser les hooks personnalisés pour la logique métier
+- Utiliser `useState` pour l'état local des composants
+- Utiliser `useEffect` pour les effets secondaires
+
+## Gestion des Erreurs
+
+- Utiliser le hook `useToast` pour les notifications
+- Gérer les erreurs de manière cohérente dans les mutations
+- Afficher les messages d'erreur du backend quand disponibles
+- Utiliser le variant 'destructive' pour les erreurs
+
+## Optimisation
+
+- Utiliser le composant `Image` de Next.js pour l'optimisation des images
+- Spécifier les dimensions des images
+- Utiliser le lazy loading pour les images non critiques
+- Utiliser les composants `Skeleton` pour les états de chargement
+
+## Tests
+
+- Écrire des tests unitaires pour les composants et les fonctions utilitaires
+- Utiliser React Testing Library pour les tests de composants
+- Suivre le pattern AAA (Arrange, Act, Assert)
+- Placer les tests à côté des fichiers qu'ils testent
+
+## Documentation
+
+- Documenter les composants complexes avec des commentaires JSDoc
+- Inclure des exemples d'utilisation pour les composants réutilisables
+- Maintenir à jour le README.md avec les nouvelles fonctionnalités
+- Documenter les changements majeurs dans le fichier CHANGELOG.md
+
+## JSDoc
+
+Exemple de documentation JSDoc pour les fonctions et composants :
+
+```javascript
+/**
+ * Composant d'affichage du profil utilisateur
+ * @param {Object} props
+ * @param {string} props.name - Nom de l'utilisateur
+ * @param {string} props.email - Email de l'utilisateur
+ * @param {number} [props.age] - Âge de l'utilisateur (optionnel)
+ */
+export const UserProfile = ({ name, email, age = 0 }) => {
+  // ...
+}
+
+/**
+ * Calcule le total du panier
+ * @param {Array<Object>} items - Liste des articles dans le panier
+ * @param {number} items[].price - Prix de l'article
+ * @param {number} items[].quantity - Quantité de l'article
+ * @returns {number} Le total du panier
+ */
+const calculateCartTotal = (items) => {
+  return items.reduce((total, item) => total + (item.price * item.quantity), 0)
+}
+```

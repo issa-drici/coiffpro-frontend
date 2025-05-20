@@ -1,9 +1,7 @@
-'use client'
-
 import Link from 'next/link'
 import { IconRazorElectric } from '@tabler/icons-react'
-import { RegisterForm } from '@/components/register-form'
 import Image from 'next/image'
+import { RegisterForm } from '@/components/register-form'
 
 const Page = () => {
     return (

@@ -33,9 +33,8 @@ const Hero = () => {
             </p>
             <div className="flex gap-4 justify-center mb-10 flex-col sm:flex-row">
                 <Link href="/register">
-                    <Button>Essai gratuit</Button>
+                    <Button>Essayer gratuitement</Button>
                 </Link>
-                <Button variant="outline">Voir la démo</Button>
             </div>
             {/* Bloc démo */}
             <div className="w-full max-w-5xl h-[250px] md:h-[500px] bg-gray-100 rounded-2xl relative overflow-hidden">
@@ -50,15 +49,11 @@ const Hero = () => {
             {/* Ligne logos partenaires */}
             <div className="w-full max-w-5xl flex flex-col md:flex-row items-center justify-between gap-4 mt-12">
                 <div className="text-xs text-gray-700 font-medium md:text-left text-center md:mb-0 mb-2">
-                    PLUS DE 500 SALONS DE COIFFURE NOUS FONT CONFIANCE EN
-                    FRANCE
+                    PLUS DE 500 SALONS DE COIFFURE NOUS FONT CONFIANCE EN FRANCE
                 </div>
                 <div className="flex flex-wrap justify-center gap-8 items-center opacity-80">
                     {[1, 2, 3, 4].map(i => (
-                        <div
-                            key={i}
-                            className="w-16 h-16 relative"
-                        >
+                        <div key={i} className="w-16 h-16 relative">
                             <Image
                                 src="/images/gkcoiff.jpg"
                                 alt="Logo partenaire"

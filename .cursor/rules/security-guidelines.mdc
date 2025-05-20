@@ -1,0 +1,117 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Guide de Sécurité EatsUp Frontend
+
+## Gestion des Données Sensibles
+
+### Variables d'Environnement
+- Utiliser `.env` pour les variables d'environnement (non commité)
+- Préfixer les variables d'environnement avec `NEXT_PUBLIC_` uniquement si nécessaire côté client
+- Exemple de variables utilisées :
+  - `NEXT_PUBLIC_API_URL`
+  - `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`
+
+### Authentification
+- Utiliser le middleware Next.js pour la protection des routes
+- Implémenter la validation des tokens via le hook `useAuth`
+```javascript
+const { user, isLoading } = useAuth({ middleware: 'auth' })
+
+if (!user) {
+    return <Loading />
+}
+```
+
+## Protection contre les Attaques Courantes
+
+### XSS (Cross-Site Scripting)
+- Utiliser les composants React qui échappent automatiquement le HTML
+- Éviter l'utilisation de `dangerouslySetInnerHTML`
+- Valider les entrées utilisateur dans les formulaires
+
+### CSRF (Cross-Site Request Forgery)
+- Utiliser le token CSRF de Laravel Sanctum
+- Implémenter la vérification CSRF dans les requêtes
+```javascript
+const csrf = () => axios.get('/sanctum/csrf-cookie')
+
+const login = async ({ setErrors, ...props }) => {
+    await csrf()
+    // ... reste de la logique
+}
+```
+
+### Injection
+- Utiliser des requêtes paramétrées pour les appels API
+- Valider les données côté client avant l'envoi
+- Utiliser les types appropriés pour les données
+
+## Bonnes Pratiques Générales
+
+### API Calls
+- Utiliser HTTPS pour toutes les requêtes
+- Gérer les erreurs de manière appropriée
+- Implémenter des timeouts pour les requêtes
+```javascript
+const api = axios.create({
+    baseURL: process.env.NEXT_PUBLIC_API_URL,
+    timeout: 10000,
+    headers: {
+        'Content-Type': 'application/json'
+    }
+})
+```
+
+### Gestion des Erreurs
+- Utiliser le hook `useToast` pour les notifications d'erreur
+- Afficher les messages d'erreur du backend
+- Logger les erreurs de manière appropriée
+```javascript
+onError: async error => {
+    toast({
+        title: 'Une erreur est survenue',
+        description: error?.response?.data?.message,
+        variant: 'destructive',
+    })
+}
+```
+
+### Déploiement
+- Activer HTTPS en production
+- Mettre en place les en-têtes de sécurité appropriés
+- Maintenir les dépendances à jour
+
+## Protection des Données
+
+### Données Personnelles
+- Conformité RGPD
+- Politique de confidentialité transparente
+- Conservation limitée des données
+- Droits des utilisateurs respectés
+
+### Sécurité des Fichiers
+- Validation des types de fichiers
+- Limitation de la taille des fichiers
+- Stockage sécurisé des images
+```javascript
+<FileUploadInput
+    accept="image/*"
+    maxSize="2MB"
+    // ...
+/>
+```
+
+## Audit de Sécurité
+
+### Maintenance
+- Mettre à jour régulièrement les dépendances
+- Effectuer des audits de sécurité
+- Maintenir un registre des vulnérabilités
+
+### Monitoring
+- Surveiller les tentatives d'accès non autorisées
+- Logger les actions sensibles
+- Mettre en place des alertes pour les activités suspectes

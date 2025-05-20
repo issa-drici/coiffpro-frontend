@@ -36,7 +36,7 @@ const data = {
     navMain: [
         {
             title: 'Dashboard',
-            url: '#',
+            url: '/admin/dashboard',
             icon: IconDashboard,
         },
         {
@@ -46,7 +46,7 @@ const data = {
         },
         {
             title: "Liste d'attente",
-            url: '#',
+            url: '/admin/queue',
             icon: IconChartBar,
         },
         {

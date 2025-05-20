@@ -1,0 +1,220 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Guide de Performance EatsUp Frontend
+
+## Optimisation des Composants
+
+### Mémoization
+- Utiliser `useMemo` pour les calculs coûteux
+- Utiliser `useCallback` pour les fonctions passées en props
+- Utiliser `React.memo` pour les composants purs
+
+```javascript
+// Exemple d'utilisation de useMemo
+const expensiveCalculation = useMemo(() => {
+  return items.reduce((total, item) => total + item.price, 0)
+}, [items])
+
+// Exemple d'utilisation de useCallback
+const handleSubmit = useCallback((data) => {
+  submitData(data)
+}, [submitData])
+
+// Exemple de composant mémoïsé
+const ExpensiveComponent = React.memo(({ data }) => {
+  return <div>{/* ... */}</div>
+})
+```
+
+### Gestion du Cache avec React Query
+```javascript
+// Configuration globale dans ReactQueryProvider.js
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            staleTime: 1000 * 60 * 5, // 5 minutes
+            cacheTime: 1000 * 60 * 10, // 10 minutes
+            retry: 2,
+            refetchOnWindowFocus: false,
+        },
+    },
+})
+
+// Utilisation dans les hooks
+const { data, isLoading, isFetching } = useQuery({
+    queryKey: ['restaurants', { name, page, perPage }],
+    queryFn: () => getAllRestaurants({ name, page, perPage }),
+    keepPreviousData: true
+})
+```
+
+### États de Chargement
+- Utiliser le composant `Skeleton` pour les états de chargement
+- Afficher les skeletons pendant `isLoading` ou `isFetching`
+```javascript
+{isLoadingRestaurant || isFetchingRestaurant ? (
+    <Skeleton className="h-40 w-full mt-1" />
+) : (
+    // Contenu réel
+)}
+```
+
+## Optimisation des Images
+
+### Bonnes Pratiques
+- Utiliser le composant `next/image` pour l'optimisation automatique
+- Spécifier les dimensions des images
+- Utiliser des formats modernes (WebP)
+- Implémenter le lazy loading des images
+
+```javascript
+import Image from 'next/image'
+
+// Images prioritaires (above the fold)
+<Image
+    src="/images/logo.png"
+    alt="Logo Eatsup"
+    width={300}
+    height={43}
+    priority
+/>
+
+// Images avec lazy loading
+<Image
+    src={item.images[currentImageIndex].url}
+    alt={item.name?.[activeLanguage]}
+    fill
+    className="object-cover"
+/>
+
+// Images responsives
+<Image
+    src="/images/serveuse.png"
+    alt="serveuse"
+    className="w-full h-auto md:w-[37rem]"
+    width={600}
+    height={470}
+/>
+```
+
+## Optimisation des Données
+
+### Gestion du Cache
+- Utiliser SWR ou React Query pour la gestion du cache
+- Implémenter la stratégie de revalidation appropriée
+- Mettre en cache les données statiques
+
+```javascript
+// Exemple avec SWR
+const { data, error } = useSWR('/api/restaurants', fetcher, {
+  revalidateOnFocus: false,
+  revalidateOnReconnect: false,
+  dedupingInterval: 60000
+})
+```
+
+### Gestion des Requêtes
+- Utiliser `keepPreviousData` pour la pagination
+- Implémenter l'invalidation du cache après les mutations
+```javascript
+const handleCallbackSuccess = async () => {
+    await queryClient.invalidateQueries(['menuItems', menuId])
+}
+```
+
+### Pagination et Chargement Infini
+- Implémenter la pagination pour les grandes listes
+- Utiliser le chargement infini pour les listes scrollables
+- Précharger la page suivante
+
+```javascript
+// Exemple de chargement infini
+const { data, size, setSize } = useSWRInfinite(
+  (index) => `/api/restaurants?page=${index + 1}`,
+  fetcher
+)
+```
+
+## Optimisation du Bundle
+
+### Analyse et Monitoring
+- Utiliser `@next/bundle-analyzer` pour analyser la taille du bundle
+- Surveiller les métriques Core Web Vitals
+- Optimiser les imports
+
+```javascript
+// next.config.js
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true'
+})
+
+module.exports = withBundleAnalyzer({
+  // configuration
+})
+```
+
+### Configuration Next.js
+- Utiliser le mode production pour le build
+- Activer la compression
+- Optimiser les images automatiquement
+
+### Optimisation des Imports
+- Utiliser les imports dynamiques pour les composants lourds
+- Éviter les imports inutiles
+- Utiliser le tree shaking
+
+```javascript
+// Import dynamique
+const DynamicComponent = dynamic(() => import('./Component'))
+
+// Import sélectif
+import { map } from 'lodash-es'
+```
+
+## Optimisation du Rendu
+
+### Server-Side Rendering (SSR)
+- Utiliser `getServerSideProps` pour les données dynamiques
+- Utiliser `getStaticProps` pour les données statiques
+- Implémenter l'ISR (Incremental Static Regeneration) quand approprié
+
+```javascript
+// Exemple d'ISR
+export async function getStaticProps() {
+  return {
+    props: {
+      data: await fetchData()
+    },
+    revalidate: 60 // Revalider toutes les 60 secondes
+  }
+}
+```
+
+### Hydration
+- Minimiser les différences entre le rendu serveur et client
+- Utiliser `suppressHydrationWarning` avec précaution
+- Éviter les contenus dynamiques pendant l'hydratation
+
+## Monitoring et Métriques
+
+### Core Web Vitals
+- Surveiller le LCP (Largest Contentful Paint)
+- Surveiller le FID (First Input Delay)
+- Surveiller le CLS (Cumulative Layout Shift)
+
+### Outils
+- Utiliser les DevTools de React Query
+- Surveiller les performances avec les outils de développement
+- Utiliser le mode production pour les tests de performance
+
+```javascript
+// Exemple de métrique personnalisée
+export function reportWebVitals(metric) {
+  if (metric.label === 'web-vital') {
+    console.log(metric) // Envoyer à votre service d'analytics
+  }
+}
+```
