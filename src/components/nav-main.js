@@ -28,7 +28,7 @@ export function NavMain({ items }) {
                             asChild>
                             <Link href="/admin/queue">
                                 <IconEye />
-                                <span>Voir la liste d'attente du jour</span>
+                                <span>Liste d'attente du jour</span>
                             </Link>
                         </SidebarMenuButton>
                         {/* <Button

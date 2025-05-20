@@ -5,15 +5,7 @@ import { fr } from 'date-fns/locale'
 import { QueueStatusBadge } from './QueueStatusBadge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import {
-    CheckCircle,
-    XCircle,
-    Clock,
-    Phone,
-    Scissors,
-    Timer,
-    User,
-} from 'lucide-react'
+import { XCircle, Clock, Phone, Scissors, Timer, User } from 'lucide-react'
 import { useTakeClient } from '@/services/queue/useTakeClient'
 import { useMarkClientAbsent } from '@/services/queue/useMarkClientAbsent'
 import { useState } from 'react'
@@ -36,6 +28,7 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from '@/components/ui/drawer'
+import { ResponsiveDialog } from '@/components/responsive-dialog'
 
 export function QueueItem({ client, isCurrentClient = false }) {
     const { mutate: handleTakeClient, isLoading: isTakingClient } =
@@ -89,25 +82,22 @@ export function QueueItem({ client, isCurrentClient = false }) {
     function ConfirmTakeDialog({ trigger }) {
         if (isDesktop) {
             return (
-                <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-                    <DialogTrigger asChild>{trigger}</DialogTrigger>
-                    <DialogContent className="sm:max-w-[400px]">
-                        <DialogHeader>
-                            <DialogTitle>
-                                Confirmer la prise en charge
-                            </DialogTitle>
-                            <DialogDescription>
-                                Cette action mettra fin à la prestation du
-                                client actuellement en cours. Êtes-vous sûr de
-                                vouloir prendre en charge ce client&nbsp;?
-                            </DialogDescription>
-                        </DialogHeader>
-                        <div className="flex justify-end gap-2 mt-4">
+                <ResponsiveDialog
+                    open={openDialog}
+                    onOpenChange={setOpenDialog}
+                    trigger={trigger}
+                    title="Confirmer la prise en charge"
+                    description="Cette action mettra fin à la prestation du client actuellement en cours. Êtes-vous sûr de vouloir prendre en charge ce client ?"
+                    size="sm"
+                    actions={{
+                        cancel: (
                             <Button
                                 variant="outline"
                                 onClick={() => setOpenDialog(false)}>
                                 Annuler
                             </Button>
+                        ),
+                        confirm: (
                             <Button
                                 onClick={() => {
                                     setOpenDialog(false)
@@ -116,9 +106,9 @@ export function QueueItem({ client, isCurrentClient = false }) {
                                 variant="default">
                                 Confirmer
                             </Button>
-                        </div>
-                    </DialogContent>
-                </Dialog>
+                        ),
+                    }}
+                />
             )
         }
         return (
@@ -214,6 +204,15 @@ export function QueueItem({ client, isCurrentClient = false }) {
         )
     }
 
+    const trigger = (
+        <Button
+            variant="default"
+            onClick={() => setOpenDialog(true)}
+            disabled={isCurrentClient}>
+            Prendre en charge
+        </Button>
+    )
+
     return (
         <Card
             className={`relative hover:shadow-md transition-shadow ${isCurrentClient ? 'border-primary' : ''}`}>
@@ -245,20 +244,7 @@ export function QueueItem({ client, isCurrentClient = false }) {
                     </div>
                     {client.status === 'waiting' && (
                         <div className="flex flex-col gap-2 w-28 md:flex-row md:w-auto md:gap-2 ml-2 md:ml-0">
-                            <ConfirmTakeDialog
-                                trigger={
-                                    <Button
-                                        variant="default"
-                                        size="sm"
-                                        className="h-8 w-full md:w-auto bg-primary hover:bg-primary/90"
-                                        disabled={
-                                            isTakingClient || isMarkingAbsent
-                                        }>
-                                        <CheckCircle className="h-4 w-4 mr-2" />
-                                        Prendre
-                                    </Button>
-                                }
-                            />
+                            <ConfirmTakeDialog trigger={trigger} />
                             <ConfirmAbsentDialog
                                 trigger={
                                     <Button

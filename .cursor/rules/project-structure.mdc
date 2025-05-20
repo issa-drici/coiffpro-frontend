@@ -9,7 +9,8 @@ Ce projet est une application Next.js moderne utilisant JavaScript, Tailwind CSS
 
 ## Organisation des Dossiers
 
-- `src/app/` : Contient les routes et les pages de l'application (architecture App Router de Next.js)
+- `src/app/(app)` : Contient les routes et les pages de l'application (architecture App Router de Next.js) protégés par l'auth
+- `src/app/(auth)` : Contient les routes et les pages de l'application (architecture App Router de Next.js) concernant l'authentification
 - `src/components/` : Composants réutilisables spécifiques à l'application
 - `src/ui/` : Composants UI de base et composants shadcn/ui
 - `src/utils/` : Fonctions utilitaires et helpers

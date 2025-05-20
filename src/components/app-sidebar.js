@@ -41,7 +41,7 @@ const data = {
         },
         {
             title: 'Prestations',
-            url: '#',
+            url: '/admin/services',
             icon: IconListDetails,
         },
         {
