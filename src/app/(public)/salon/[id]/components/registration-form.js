@@ -17,7 +17,6 @@ import {
     User,
     Mail,
     Clock,
-    Scissors,
     Calendar,
     Euro,
 } from 'lucide-react'
