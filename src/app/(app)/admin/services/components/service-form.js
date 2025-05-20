@@ -89,7 +89,6 @@ export function ServiceForm({ service, onClose }) {
                                 <Input
                                     placeholder="Ex: Coupe homme"
                                     {...field}
-                                    autoFocus
                                 />
                             </FormControl>
                             <FormMessage />

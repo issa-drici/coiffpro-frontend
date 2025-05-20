@@ -66,7 +66,7 @@ export function RegisterForm({ className, ...props }) {
                         className="block mt-1 w-full"
                         onChange={event => setName(event.target.value)}
                         required
-                        autoFocus
+                        // autoFocus
                     />
                 </div>
                 <div className="grid gap-3">
