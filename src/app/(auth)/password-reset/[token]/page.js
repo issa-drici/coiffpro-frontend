@@ -1,7 +1,7 @@
 'use client'
 
-import InputError from '@/components/input-error'
-import Label from '@/components/label'
+import { InputError } from '@/components/input-error'
+import { Label } from '@/components/label'
 import { useAuth } from '@/hooks/auth'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
@@ -71,10 +71,7 @@ const PasswordReset = () => {
                         required
                     />
 
-                    <InputError
-                        messages={errors.password}
-                        className="mt-2"
-                    />
+                    <InputError messages={errors.password} className="mt-2" />
                 </div>
 
                 {/* Confirm Password */}

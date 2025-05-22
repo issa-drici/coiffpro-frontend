@@ -47,15 +47,6 @@ import { z } from 'zod'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { Badge } from '@/ui-components/badge'
 import { Button } from '@/ui-components/button'
-import {
-    Chart,
-    ChartArea,
-    ChartAxis,
-    ChartBar,
-    ChartGroup,
-    ChartLine,
-    ChartScatter,
-} from '@/ui-components/chart'
 import { Checkbox } from '@/ui-components/checkbox'
 import {
     Drawer,
@@ -72,7 +63,6 @@ import {
     DropdownMenuCheckboxItem,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/ui-components/dropdown-menu'
@@ -81,9 +71,7 @@ import { Label } from '@/ui-components/label'
 import {
     Select,
     SelectContent,
-    SelectGroup,
     SelectItem,
-    SelectLabel,
     SelectTrigger,
     SelectValue,
 } from '@/ui-components/select'
@@ -97,6 +85,7 @@ import {
     TableRow,
 } from '@/ui-components/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/ui-components/tabs'
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/ui-components/chart'
 
 export const schema = z.object({
     id: z.number(),

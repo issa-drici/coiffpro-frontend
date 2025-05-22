@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { Button } from '@/ui-components/button'
 import { Plus } from 'lucide-react'
-import { SiteHeader } from '@/components/site-header'
 import { ServiceList } from '@/features/services/service-list'
 import { ServiceForm } from '@/features/services/service-form'
 import { ResponsiveDialog } from '@/components/responsive-dialog'
