@@ -1,2 +1,2 @@
-src/components/ui/
+src/ui-components/
 src/hooks/use-mobile.ts

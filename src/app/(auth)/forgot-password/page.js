@@ -1,12 +1,12 @@
 'use client'
 
-import InputError from '@/components/InputError'
-import Label from '@/components/Label'
+import InputError from '@/components/input-error'
+import Label from '@/components/label'
 import { useAuth } from '@/hooks/auth'
 import { useState } from 'react'
 import AuthSessionStatus from '@/app/(auth)/AuthSessionStatus'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { Button } from '@/ui-components/button'
+import { Input } from '@/ui-components/input'
 
 const Page = () => {
     const { forgotPassword } = useAuth({

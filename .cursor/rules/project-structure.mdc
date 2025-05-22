@@ -35,7 +35,7 @@ Ce projet est une application Next.js moderne utilisant JavaScript, Tailwind CSS
 ## Bonnes Pratiques
 
 1. Les composants doivent être placés dans le dossier approprié selon leur usage :
-   - Composants UI réutilisables → `src/shadcn-components/ui/`
+   - Composants UI réutilisables → `src/shadcn-ui-components/`
    - Composants spécifiques à l'application → `src/components/`
 2. Les services API doivent être placés dans `src/services/`
 3. Les hooks personnalisés doivent être placés dans `src/hooks/`

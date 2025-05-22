@@ -1,19 +1,11 @@
-'use client'
-
-import { QueueList } from '@/components/queue/QueueList'
 import { SiteHeader } from '@/components/site-header'
+import { QueueSheet } from '@/features/queue'
 
 export default function QueuePage() {
     return (
         <>
             <SiteHeader name="Liste d'attente" />
-            <div className="flex flex-1 flex-col">
-                <div className="@container/main flex flex-1 flex-col gap-2">
-                    <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-                        <QueueList />
-                    </div>
-                </div>
-            </div>
+            <QueueSheet />
         </>
     )
 }
