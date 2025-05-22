@@ -1,6 +1,7 @@
 import { Button } from '@/ui-components/button'
 import { Card, CardHeader, CardTitle } from '@/ui-components/card'
 import Image from 'next/image'
+import Link from 'next/link'
 
 export const CTA = () => {
     return (
@@ -41,9 +42,11 @@ export const CTA = () => {
                             </div>
                         </div>
                         <div className="flex flex-col items-start gap-4 mt-auto">
-                            <Button className="w-full md:w-auto">
-                                Commencer l'essai gratuit →
-                            </Button>
+                            <Link href="/register">
+                                <Button className="w-full md:w-auto">
+                                    Commencer l'essai gratuit →
+                                </Button>
+                            </Link>
                             <p className="text-sm text-gray-500">
                                 Déjà plus de 500 coiffeurs nous font confiance
                             </p>

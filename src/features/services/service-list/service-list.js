@@ -108,7 +108,7 @@ export function ServiceList({ onEdit }) {
                 onOpenChange={() => setServiceToDelete(null)}
                 title="Êtes-vous sûr ?"
                 description={`Cette action est irréversible. La prestation "${serviceToDelete?.name}" sera définitivement supprimée.`}
-                size="sm"
+                size="default"
                 actions={{
                     cancel: (
                         <Button variant="outline">

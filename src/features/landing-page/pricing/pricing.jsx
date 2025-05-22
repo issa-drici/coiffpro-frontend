@@ -1,5 +1,13 @@
 import { Button } from '@/ui-components/button'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/ui-components/card'
+import {
+    Card,
+    CardHeader,
+    CardTitle,
+    CardDescription,
+    CardContent,
+    CardFooter,
+} from '@/ui-components/card'
+import Link from 'next/link'
 
 export const Pricing = () => {
     return (
@@ -46,9 +54,11 @@ export const Pricing = () => {
                             </li>
                         </ul>
                     </CardContent>
-                    <CardFooter>
-                        <Button className="w-full">Essai gratuit</Button>
-                    </CardFooter>
+                    <Link href="/register">
+                        <CardFooter>
+                            <Button className="w-full">Essai gratuit</Button>
+                        </CardFooter>
+                    </Link>
                 </Card>
 
                 {/* Pro (mis en avant) */}
@@ -86,9 +96,11 @@ export const Pricing = () => {
                             </li>
                         </ul>
                     </CardContent>
-                    <CardFooter>
-                        <Button className="w-full">Choisir Pro</Button>
-                    </CardFooter>
+                    <Link href="/register">
+                        <CardFooter>
+                            <Button className="w-full">Choisir Pro</Button>
+                        </CardFooter>
+                    </Link>
                 </Card>
 
                 {/* Sur-mesure */}
@@ -123,11 +135,13 @@ export const Pricing = () => {
                             </li>
                         </ul>
                     </CardContent>
+                    <a href="mailto:contact@coiffpro.com">
                     <CardFooter>
                         <Button variant="outline" className="w-full">
                             Contactez-nous
                         </Button>
                     </CardFooter>
+                    </a>
                 </Card>
             </div>
         </section>
