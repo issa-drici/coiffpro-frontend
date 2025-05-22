@@ -2,8 +2,8 @@
 
 import { cn } from '@/lib/utils'
 import { Input } from '@/ui-components/input'
+import { Label } from '@/ui-components/label'
 
-import Label from '@/components/label'
 import { useAuth } from '@/hooks/auth'
 import { Button } from '@/ui-components/button'
 import { useState } from 'react'

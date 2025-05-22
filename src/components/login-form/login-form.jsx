@@ -2,8 +2,7 @@
 
 import { cn } from '@/lib/utils'
 import { Input } from '@/ui-components/input'
-
-import Label from '@/components/label'
+import { Label } from '@/ui-components/label'
 import { useAuth } from '@/hooks/auth'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
