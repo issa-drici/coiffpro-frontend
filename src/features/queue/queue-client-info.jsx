@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { format, differenceInMinutes, differenceInSeconds, format as formatDate, parseISO } from 'date-fns'
+import { format, format as formatDate } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { Timer, UserCheck, MapPin, Phone } from 'lucide-react'
 import { useFindClient } from '@/services/queue/useFindClient'
@@ -39,7 +39,7 @@ function useCountdown(targetDate) {
     return timeLeft
 }
 
-export function QueueClientInfo({ clientId, salonId }) {
+export function QueueClientInfo({ clientId }) {
     const { data: client, isLoading, error } = useFindClient(clientId)
     const timeLeft = useCountdown(client?.estimatedTime)
 
@@ -65,7 +65,8 @@ export function QueueClientInfo({ clientId, salonId }) {
             <Alert variant="destructive">
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
-                    Une erreur est survenue lors du chargement des informations de la file d'attente.
+                    Une erreur est survenue lors du chargement des informations
+                    de la file d'attente.
                 </AlertDescription>
             </Alert>
         )
@@ -87,7 +88,9 @@ export function QueueClientInfo({ clientId, salonId }) {
     }
 
     const formatDay = dateString => {
-        return formatDate(new Date(dateString), "EEEE d MMMM yyyy", { locale: fr })
+        return formatDate(new Date(dateString), 'EEEE d MMMM yyyy', {
+            locale: fr,
+        })
     }
 
     const formatTimeLeft = () => {
@@ -129,7 +132,10 @@ export function QueueClientInfo({ clientId, salonId }) {
                     {/* Montant à payer */}
                     {client.amountToPay && (
                         <div className="mt-4 text-base font-medium text-green-700 bg-green-100 rounded px-3 py-1">
-                            Montant à régler : <span className="font-bold">{client.amountToPay} €</span>
+                            Montant à régler :{' '}
+                            <span className="font-bold">
+                                {client.amountToPay} €
+                            </span>
                         </div>
                     )}
                 </div>
@@ -141,20 +147,23 @@ export function QueueClientInfo({ clientId, salonId }) {
                     <div className="flex items-start gap-2">
                         <MapPin className="h-4 w-4 mt-1 text-muted-foreground" />
                         <div>
-                            <div className="font-medium">{client.salonName}</div>
+                            <div className="font-medium">
+                                {client.salonName}
+                            </div>
                             <a
                                 href={`https://www.google.fr/maps/search/${encodeURIComponent(client.salonAddress)}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-sm text-primary hover:underline"
-                            >
+                                className="text-sm text-primary hover:underline">
                                 {client.salonAddress}
                             </a>
                         </div>
                     </div>
                     <div className="flex items-center gap-2 mt-3">
                         <Phone className="h-4 w-4 text-muted-foreground" />
-                        <a href={`tel:${client.salonPhone}`} className="text-primary hover:underline">
+                        <a
+                            href={`tel:${client.salonPhone}`}
+                            className="text-primary hover:underline">
                             {client.salonPhone}
                         </a>
                     </div>
@@ -179,7 +188,9 @@ export function QueueClientInfo({ clientId, salonId }) {
 
             {/* Jour de passage tout en bas */}
             <div className="w-full flex justify-end mt-2">
-                <span className="text-xs text-muted-foreground italic">{formatDay(client.estimatedTime)}</span>
+                <span className="text-xs text-muted-foreground italic">
+                    {formatDay(client.estimatedTime)}
+                </span>
             </div>
         </div>
     )

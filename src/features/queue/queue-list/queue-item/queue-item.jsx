@@ -5,7 +5,7 @@ import { fr } from 'date-fns/locale'
 import { QueueStatusBadge } from '@/features/queue/queue-list/queue-item/queue-status-badge'
 import { Button } from '@/ui-components/button'
 import { Card, CardContent } from '@/ui-components/card'
-import { XCircle, Clock, Phone, Scissors, Timer, User } from 'lucide-react'
+import { Clock, Phone, Scissors, Timer, User } from 'lucide-react'
 import { useTakeClient } from '@/services/queue/useTakeClient'
 import { useMarkClientAbsent } from '@/services/queue/useMarkClientAbsent'
 import { useState } from 'react'
@@ -124,9 +124,6 @@ export function QueueItem({ client, isCurrentClient = false }) {
                         </DrawerDescription>
                     </DrawerHeader>
                     <DrawerFooter className="pt-2">
-                        <DrawerClose asChild>
-                            <Button variant="outline">Annuler</Button>
-                        </DrawerClose>
                         <Button
                             onClick={() => {
                                 setOpenDialog(false)
@@ -135,6 +132,9 @@ export function QueueItem({ client, isCurrentClient = false }) {
                             variant="default">
                             Confirmer
                         </Button>
+                        <DrawerClose asChild>
+                            <Button variant="outline">Annuler</Button>
+                        </DrawerClose>
                     </DrawerFooter>
                 </DrawerContent>
             </Drawer>
@@ -158,17 +158,17 @@ export function QueueItem({ client, isCurrentClient = false }) {
                         </DialogHeader>
                         <div className="flex justify-end gap-2 mt-4">
                             <Button
-                                variant="outline"
-                                onClick={() => setOpenAbsentDialog(false)}>
-                                Annuler
-                            </Button>
-                            <Button
                                 onClick={() => {
                                     setOpenAbsentDialog(false)
                                     handleMarkAbsent(client.id)
                                 }}
                                 variant="destructive">
                                 Confirmer
+                            </Button>
+                            <Button
+                                variant="outline"
+                                onClick={() => setOpenAbsentDialog(false)}>
+                                Annuler
                             </Button>
                         </div>
                     </DialogContent>
@@ -187,9 +187,6 @@ export function QueueItem({ client, isCurrentClient = false }) {
                         </DrawerDescription>
                     </DrawerHeader>
                     <DrawerFooter className="pt-2">
-                        <DrawerClose asChild>
-                            <Button variant="outline">Annuler</Button>
-                        </DrawerClose>
                         <Button
                             onClick={() => {
                                 setOpenAbsentDialog(false)
@@ -198,6 +195,9 @@ export function QueueItem({ client, isCurrentClient = false }) {
                             variant="destructive">
                             Confirmer
                         </Button>
+                        <DrawerClose asChild>
+                            <Button variant="outline">Annuler</Button>
+                        </DrawerClose>
                     </DrawerFooter>
                 </DrawerContent>
             </Drawer>
@@ -208,6 +208,7 @@ export function QueueItem({ client, isCurrentClient = false }) {
         <Button
             variant="default"
             onClick={() => setOpenDialog(true)}
+            className="flex-1"
             disabled={isCurrentClient}>
             Prendre en charge
         </Button>
@@ -215,7 +216,7 @@ export function QueueItem({ client, isCurrentClient = false }) {
 
     return (
         <Card
-            className={`relative hover:shadow-md transition-shadow ${isCurrentClient ? 'border-primary' : ''}`}>
+            className={`relative pb-0 hover:shadow-md transition-shadow ${isCurrentClient ? 'border-primary' : ''}`}>
             <CardContent className="p-0">
                 {/* En-tête avec numéro et statut */}
                 <div className="flex items-center justify-between border-b p-4">
@@ -242,25 +243,6 @@ export function QueueItem({ client, isCurrentClient = false }) {
                             </div>
                         </div>
                     </div>
-                    {client.status === 'waiting' && (
-                        <div className="flex flex-col gap-2 w-28 md:flex-row md:w-auto md:gap-2 ml-2 md:ml-0">
-                            <ConfirmTakeDialog trigger={trigger} />
-                            <ConfirmAbsentDialog
-                                trigger={
-                                    <Button
-                                        variant="destructive"
-                                        size="sm"
-                                        className="h-8 w-full md:w-auto"
-                                        disabled={
-                                            isTakingClient || isMarkingAbsent
-                                        }>
-                                        <XCircle className="h-4 w-4 mr-2" />
-                                        Absent
-                                    </Button>
-                                }
-                            />
-                        </div>
-                    )}
                 </div>
 
                 {/* Infos principales : passage, durée, etc. */}
@@ -315,6 +297,25 @@ export function QueueItem({ client, isCurrentClient = false }) {
                         </div>
                     </div>
                 </div>
+
+                {/* Boutons d'action en bas */}
+                {client.status === 'waiting' && (
+                    <div className="flex flex-row gap-2 p-2 border-t bg-muted/50">
+                        <ConfirmTakeDialog trigger={trigger} />
+                        <ConfirmAbsentDialog
+                            trigger={
+                                <Button
+                                    variant="destructive"
+                                    className="flex-1"
+                                    disabled={
+                                        isTakingClient || isMarkingAbsent
+                                    }>
+                                    Absent
+                                </Button>
+                            }
+                        />
+                    </div>
+                )}
             </CardContent>
         </Card>
     )

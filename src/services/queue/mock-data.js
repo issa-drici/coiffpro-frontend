@@ -11,7 +11,7 @@ export const mockQueueData = [
         services: ['Coupe homme', 'Barbe'],
         registrationTime: '2024-03-20T10:00:00',
         position: 1,
-        estimatedTime: '2025-05-23T21:57:00.000Z',
+        estimatedTime: '2025-05-23T23:57:00.000Z',
         status: 'waiting',
         estimatedDuration: 30,
         amountToPay: 32,
@@ -79,24 +79,9 @@ export const mockQueueData = [
  * @returns {QueueClient | null}
  */
 export const mockClientData = clientId => {
-    console.log(
-        'mockClientData - Searching for client with ID:',
-        clientId,
-        'type:',
-        typeof clientId,
-    )
     const client = mockQueueData.find(c => {
-        console.log(
-            'Comparing mock data:',
-            c.id,
-            clientId,
-            'types:',
-            typeof c.id,
-            typeof clientId,
-        )
         return String(c.id) === String(clientId)
     })
-    console.log('Found mock client:', client)
 
     if (!client) return null
 

@@ -207,6 +207,13 @@ export function QueueList() {
                     <Clock className="h-7 w-7" />
                     Ajouter 10 min de retard
                 </Button>
+                <Button
+                    variant="outline"
+                    onClick={handleRemoveDelay}
+                    className="flex items-center justify-center text-lg font-semibold py-4 px-6 gap-3 w-full sm:w-auto rounded-2xl shadow-md">
+                    <Clock className="h-7 w-7" />
+                    Retirer 10 min d'attente
+                </Button>
                 {/* <Button
                     variant="destructive"
                     onClick={handleEndService}

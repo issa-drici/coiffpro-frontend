@@ -1,4 +1,3 @@
-import { RegistrationForm } from '@/features/registration-queue/registration-form'
 import { QueueClientInfo } from '@/features/queue/queue-client-info'
 
 export default function SalonRegistrationPage({ params }) {
@@ -52,12 +51,19 @@ export default function SalonRegistrationPage({ params }) {
                                     En cas de problème, veuillez vous adresser à
                                     l'accueil du salon.
                                 </p>
-                                <div className="hidden md:block text-muted-foreground/50">
+                                <div className="text-muted-foreground/50">
                                     •
                                 </div>
-                                <p className="hidden md:block">
+                                <p>
                                     Les temps d'attente sont donnés à titre
                                     indicatif
+                                </p>
+                                <div className="text-muted-foreground/50">
+                                    •
+                                </div>
+                                <p>
+                                    Toute absence sera facturée à la prochaine
+                                    réservation.
                                 </p>
                             </div>
                         </footer>
