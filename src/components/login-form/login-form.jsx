@@ -21,6 +21,7 @@ export function LoginForm({ className, ...props }) {
     const [shouldRemember, setShouldRemember] = useState(false)
     const [errors, setErrors] = useState([])
     const [status, setStatus] = useState(null)
+    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
         if (router.reset?.length > 0 && errors.length === 0) {
@@ -33,14 +34,21 @@ export function LoginForm({ className, ...props }) {
     const submitForm = async event => {
         event.preventDefault()
 
-        login({
-            email,
-            password,
-            remember: shouldRemember,
-            setErrors,
-            setStatus,
-            status,
-        })
+        setIsLoading(true)
+        try {
+            await login({
+                email,
+                password,
+                remember: shouldRemember,
+                setErrors,
+                setStatus,
+                status,
+            })
+        } catch (error) {
+            setErrors(error.response.data.errors)
+        } finally {
+            setIsLoading(false)
+        }
     }
     return (
         <form
@@ -102,8 +110,8 @@ export function LoginForm({ className, ...props }) {
                         </span>
                     </label>
                 </div>
-                <Button type="submit" className="w-full">
-                    Login
+                <Button type="submit" className="w-full" isLoading={isLoading}>
+                    Se connecter
                 </Button>
                 {/* <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
                     <span className="bg-background text-muted-foreground relative z-10 px-2">
