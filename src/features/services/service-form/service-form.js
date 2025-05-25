@@ -20,19 +20,21 @@ import { toast } from 'sonner'
 
 const serviceSchema = z.object({
     name: z.string().min(1, 'Le nom est requis'),
-    price: z.string()
+    price: z
+        .string()
         .min(1, 'Le prix est requis')
-        .refine((val) => !isNaN(parseFloat(val)) && parseFloat(val) > 0, {
+        .refine(val => !isNaN(parseFloat(val)) && parseFloat(val) > 0, {
             message: 'Le prix doit être un nombre positif',
         }),
-    duration: z.string()
-        .refine((val) => !val || (!isNaN(parseInt(val)) && parseInt(val) > 0), {
+    duration: z
+        .string()
+        .refine(val => !val || (!isNaN(parseInt(val)) && parseInt(val) > 0), {
             message: 'La durée doit être un nombre positif',
         })
         .optional(),
 })
 
-export function ServiceForm({ service, onClose }) {
+export function ServiceForm({ service, onClose, setIsOpen }) {
     const form = useForm({
         resolver: zodResolver(serviceSchema),
         defaultValues: {
@@ -48,7 +50,7 @@ export function ServiceForm({ service, onClose }) {
                 title: 'Prestation créée',
                 description: 'La prestation a été créée avec succès.',
             })
-            onClose()
+            setIsOpen(false)
         },
     })
 
@@ -58,19 +60,23 @@ export function ServiceForm({ service, onClose }) {
                 title: 'Prestation mise à jour',
                 description: 'La prestation a été mise à jour avec succès.',
             })
-            onClose()
+            setIsOpen(false)
         },
     })
 
-    const onSubmit = (data) => {
+    const onSubmit = data => {
         const serviceData = {
             ...data,
             price: parseFloat(data.price),
             duration: data.duration ? parseInt(data.duration) : null,
         }
 
-        if (service) {
-            updateService({ id: service.id, ...serviceData })
+        if (
+            service &&
+            typeof service.id === 'string' &&
+            service.id.length > 0
+        ) {
+            updateService({ serviceId: service.id, updates: serviceData })
         } else {
             createService(serviceData)
         }
@@ -155,20 +161,18 @@ export function ServiceForm({ service, onClose }) {
                         type="button"
                         variant="outline"
                         onClick={onClose}
-                        className="sm:w-auto"
-                    >
+                        className="sm:w-auto">
                         Annuler
                     </Button>
                     <Button
                         type="submit"
                         disabled={isCreating || isUpdating}
-                        className="sm:w-auto"
-                    >
+                        className="sm:w-auto">
                         {isCreating || isUpdating
                             ? 'Enregistrement...'
                             : service
-                            ? 'Mettre à jour'
-                            : 'Créer la prestation'}
+                              ? 'Mettre à jour'
+                              : 'Créer la prestation'}
                     </Button>
                 </div>
             </form>

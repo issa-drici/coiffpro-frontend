@@ -45,7 +45,19 @@ export function LoginForm({ className, ...props }) {
                 status,
             })
         } catch (error) {
-            setErrors(error.response.data.errors)
+            if (error?.response?.data?.errors) {
+                // Erreur Axios avec des erreurs de validation
+                setErrors(error.response.data.errors)
+            } else if (error?.response?.data?.message) {
+                // Erreur Axios avec un message d'erreur
+                setErrors({ general: error.response.data.message })
+            } else if (error instanceof Error) {
+                // Erreur JavaScript standard
+                setErrors({ general: error.message })
+            } else {
+                // Erreur inconnue
+                setErrors({ general: "Une erreur inattendue s'est produite" })
+            }
         } finally {
             setIsLoading(false)
         }

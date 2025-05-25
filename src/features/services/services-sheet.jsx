@@ -8,21 +8,21 @@ import { ServiceForm } from '@/features/services/service-form'
 import { ResponsiveDialog } from '@/components/responsive-dialog'
 
 export function ServicesSheet() {
-    const [isFormOpen, setIsFormOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(false)
     const [editingService, setEditingService] = useState(null)
 
     const handleAddClick = () => {
         setEditingService(null)
-        setIsFormOpen(true)
+        setIsOpen(true)
     }
 
     const handleEditClick = service => {
         setEditingService(service)
-        setIsFormOpen(true)
+        setIsOpen(true)
     }
 
     const handleFormClose = () => {
-        setIsFormOpen(false)
+        setIsOpen(false)
         setEditingService(null)
     }
 
@@ -43,8 +43,8 @@ export function ServicesSheet() {
             </div>
 
             <ResponsiveDialog
-                open={isFormOpen}
-                onOpenChange={setIsFormOpen}
+                open={isOpen}
+                onOpenChange={handleFormClose}
                 title={
                     editingService
                         ? 'Modifier la prestation'
@@ -55,6 +55,7 @@ export function ServicesSheet() {
                 <ServiceForm
                     service={editingService}
                     onClose={handleFormClose}
+                    setIsOpen={setIsOpen}
                 />
             </ResponsiveDialog>
         </div>

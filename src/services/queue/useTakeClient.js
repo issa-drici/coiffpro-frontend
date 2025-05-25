@@ -3,26 +3,12 @@
 import { toast } from 'sonner'
 import { takeClient } from '@/utils/api-requests'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { mockMutation, mockQueueData } from './mock-data'
-
-const isDev = true
-// const isDev = process.env.NODE_ENV === 'development'
 
 export const useTakeClient = ({ handleCallbackSuccess } = {}) => {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: clientId => {
-            if (isDev) {
-                // Simuler la mise à jour du statut du client
-                const updatedClient = mockQueueData.find(c => c.id === clientId)
-                if (updatedClient) {
-                    updatedClient.status = 'in_progress'
-                }
-                return mockMutation(updatedClient)
-            }
-            return takeClient(clientId)
-        },
+        mutationFn: (clientId) => takeClient(clientId),
         onSuccess: async (response, variables) => {
             if (handleCallbackSuccess !== undefined) {
                 handleCallbackSuccess(response, variables)

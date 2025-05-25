@@ -10,6 +10,7 @@ import { useTakeClient } from '@/services/queue/useTakeClient'
 import { useMarkClientAbsent } from '@/services/queue/useMarkClientAbsent'
 import { useState } from 'react'
 import { useMediaQuery } from '@/hooks/use-media-query'
+import { useFindServiceConfig } from '@/services/services/use-find-service-config'
 import {
     Dialog,
     DialogContent,
@@ -38,6 +39,7 @@ export function QueueItem({ client, isCurrentClient = false }) {
     const [openDialog, setOpenDialog] = useState(false)
     const [openAbsentDialog, setOpenAbsentDialog] = useState(false)
     const isDesktop = useMediaQuery('(min-width: 768px)')
+    const { data: serviceConfig } = useFindServiceConfig()
 
     const formatTime = dateString => {
         return format(new Date(dateString), 'HH:mm', { locale: fr })
@@ -51,32 +53,15 @@ export function QueueItem({ client, isCurrentClient = false }) {
     }
 
     const totalDuration = client.services.reduce((acc, service) => {
-        const serviceDurations = {
-            'Coupe homme': 20,
-            'Coupe femme': 30,
-            Barbe: 15,
-            Brushing: 25,
-            Coloration: 45,
-            Mèches: 60,
-        }
-        return acc + (serviceDurations[service] || 30)
+        return acc + (serviceConfig?.[service]?.duration || 30)
     }, 0)
 
-    const estimatedWaitTime = getEstimatedWaitTime()
-
-    // Prix fictifs par service (modifiable)
-    const servicePrices = {
-        'Coupe homme': 20,
-        'Coupe femme': 30,
-        Barbe: 10,
-        Brushing: 18,
-        Coloration: 40,
-        Mèches: 50,
-    }
     const totalPrice = client.services.reduce(
-        (acc, service) => acc + (servicePrices[service] || 20),
+        (acc, service) => acc + (serviceConfig?.[service]?.price || 20),
         0,
     )
+
+    const estimatedWaitTime = getEstimatedWaitTime()
 
     // Composant de confirmation responsive
     function ConfirmTakeDialog({ trigger }) {

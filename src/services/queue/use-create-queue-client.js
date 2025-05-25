@@ -1,11 +1,13 @@
+'use client'
+
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createQueueClient } from '@/utils/api-requests'
 
-export function useRegisterClient() {
+export const useCreateQueueClient = () => {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: ({ clientData }) => createQueueClient(clientData),
+        mutationFn: (newClient) => createQueueClient(newClient),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['queue'] })
         },

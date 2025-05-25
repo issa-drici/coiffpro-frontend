@@ -64,16 +64,24 @@ export function ServiceList({ onEdit }) {
                             <TableHead className="w-[40%]">Nom</TableHead>
                             <TableHead className="w-[30%]">Prix TTC</TableHead>
                             <TableHead className="w-[20%]">Durée</TableHead>
-                            <TableHead className="w-[10%] text-right">Actions</TableHead>
+                            <TableHead className="w-[10%] text-right">
+                                Actions
+                            </TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {services.data.map((service) => (
+                        {services.data.map(service => (
                             <TableRow key={service.id}>
-                                <TableCell className="font-medium">{service.name}</TableCell>
-                                <TableCell>{formatPrice(service.price)}</TableCell>
+                                <TableCell className="font-medium">
+                                    {service.name}
+                                </TableCell>
                                 <TableCell>
-                                    {service.duration ? `${service.duration} min` : '-'}
+                                    {formatPrice(service.price)}
+                                </TableCell>
+                                <TableCell>
+                                    {service.duration
+                                        ? `${service.duration} min`
+                                        : '-'}
                                 </TableCell>
                                 <TableCell className="text-right">
                                     <div className="flex justify-end gap-2">
@@ -81,19 +89,23 @@ export function ServiceList({ onEdit }) {
                                             variant="ghost"
                                             size="icon"
                                             onClick={() => onEdit(service)}
-                                            className="h-8 w-8"
-                                        >
+                                            className="h-8 w-8">
                                             <Edit className="h-4 w-4" />
-                                            <span className="sr-only">Modifier</span>
+                                            <span className="sr-only">
+                                                Modifier
+                                            </span>
                                         </Button>
                                         <Button
                                             variant="ghost"
                                             size="icon"
-                                            onClick={() => setServiceToDelete(service)}
-                                            className="h-8 w-8 text-destructive hover:text-destructive"
-                                        >
+                                            onClick={() =>
+                                                setServiceToDelete(service)
+                                            }
+                                            className="h-8 w-8 text-destructive hover:text-destructive">
                                             <Trash2 className="h-4 w-4" />
-                                            <span className="sr-only">Supprimer</span>
+                                            <span className="sr-only">
+                                                Supprimer
+                                            </span>
                                         </Button>
                                     </div>
                                 </TableCell>
@@ -110,17 +122,12 @@ export function ServiceList({ onEdit }) {
                 description={`Cette action est irréversible. La prestation "${serviceToDelete?.name}" sera définitivement supprimée.`}
                 size="sm"
                 actions={{
-                    cancel: (
-                        <Button variant="outline">
-                            Annuler
-                        </Button>
-                    ),
+                    cancel: <Button variant="outline">Annuler</Button>,
                     confirm: (
                         <Button
                             onClick={() => deleteService(serviceToDelete.id)}
                             disabled={isDeleting}
-                            variant="destructive"
-                        >
+                            variant="destructive">
                             {isDeleting ? 'Suppression...' : 'Supprimer'}
                         </Button>
                     ),

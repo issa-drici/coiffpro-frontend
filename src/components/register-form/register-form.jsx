@@ -17,10 +17,13 @@ export function RegisterForm({ className, ...props }) {
 
     const searchParams = useSearchParams()
 
-    const [name, setName] = useState('')
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
+    const [salonName, setSalonName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [passwordConfirmation, setPasswordConfirmation] = useState('')
+    /* eslint-disable-next-line */
     const [errors, setErrors] = useState([])
     const [isLoading, setIsLoading] = useState(false)
 
@@ -29,7 +32,9 @@ export function RegisterForm({ className, ...props }) {
         setIsLoading(true)
         try {
             await register({
-                name,
+                first_name: firstName,
+                last_name: lastName,
+                salon_name: salonName,
                 email,
                 password,
                 password_confirmation: passwordConfirmation,
@@ -37,10 +42,16 @@ export function RegisterForm({ className, ...props }) {
                 setErrors,
             })
         } catch (error) {
-            setErrors(error.response.data.errors)
+            if (error?.response?.data?.errors) {
+                setErrors(error.response.data.errors)
+            } else if (error?.response?.data?.message) {
+                setErrors({ general: error.response.data.message })
+            } else if (error instanceof Error) {
+                setErrors({ general: error.message })
+            } else {
+                setErrors({ general: "Une erreur inattendue s'est produite" })
+            }
         } finally {
-            /* eslint-disable no-console */
-            console.log(errors)
             setIsLoading(false)
         }
     }
@@ -57,18 +68,44 @@ export function RegisterForm({ className, ...props }) {
                 </p>
             </div>
             <div className="grid gap-6">
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="grid gap-3">
+                        <Label htmlFor="firstName">Prénom</Label>
+                        <Input
+                            id="firstName"
+                            type="text"
+                            value={firstName}
+                            className="block mt-1 w-full"
+                            onChange={event => setFirstName(event.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="grid gap-3">
+                        <Label htmlFor="lastName">Nom</Label>
+                        <Input
+                            id="lastName"
+                            type="text"
+                            value={lastName}
+                            className="block mt-1 w-full"
+                            onChange={event => setLastName(event.target.value)}
+                            required
+                        />
+                    </div>
+                </div>
+
                 <div className="grid gap-3">
-                    <Label htmlFor="name">Nom</Label>
+                    <Label htmlFor="salonName">Nom du salon</Label>
                     <Input
-                        id="name"
+                        id="salonName"
                         type="text"
-                        value={name}
+                        value={salonName}
                         className="block mt-1 w-full"
-                        onChange={event => setName(event.target.value)}
+                        onChange={event => setSalonName(event.target.value)}
                         required
-                        // autoFocus
+                        placeholder="Ex: Salon de coiffure Marie"
                     />
                 </div>
+
                 <div className="grid gap-3">
                     <Label htmlFor="email">Email</Label>
                     <Input
@@ -78,8 +115,10 @@ export function RegisterForm({ className, ...props }) {
                         className="block mt-1 w-full"
                         onChange={event => setEmail(event.target.value)}
                         required
+                        placeholder="m@example.com"
                     />
                 </div>
+
                 <div className="grid gap-3">
                     <Label htmlFor="password">Mot de passe</Label>
                     <Input
@@ -92,8 +131,11 @@ export function RegisterForm({ className, ...props }) {
                         autoComplete="new-password"
                     />
                 </div>
+
                 <div className="grid gap-3">
-                    <Label htmlFor="password">Mot de passe</Label>
+                    <Label htmlFor="passwordConfirmation">
+                        Confirmer le mot de passe
+                    </Label>
                     <Input
                         id="passwordConfirmation"
                         type="password"

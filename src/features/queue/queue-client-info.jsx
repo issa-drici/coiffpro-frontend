@@ -8,6 +8,7 @@ import { useFindClient } from '@/services/queue/useFindClient'
 import { Skeleton } from '@/ui-components/skeleton'
 import { Alert, AlertDescription } from '@/ui-components/alert'
 import { AlertCircle } from 'lucide-react'
+import { useFindSalonInfo } from '@/services/salon/use-find-salon-info'
 
 function useCountdown(targetDate) {
     const [timeLeft, setTimeLeft] = useState(null)
@@ -42,6 +43,12 @@ function useCountdown(targetDate) {
 export function QueueClientInfo({ clientId }) {
     const { data: client, isLoading, error } = useFindClient(clientId)
     const timeLeft = useCountdown(client?.estimatedTime)
+    const { data: salonData } = useFindSalonInfo()
+    const salon = salonData?.data || {
+        name: 'Salon CoiffPro',
+        address: '123 rue de la Coiffure, 75001 Paris',
+        phone: '01 23 45 67 89',
+    }
 
     if (isLoading) {
         return (
@@ -147,24 +154,22 @@ export function QueueClientInfo({ clientId }) {
                     <div className="flex items-start gap-2">
                         <MapPin className="h-4 w-4 mt-1 text-muted-foreground" />
                         <div>
-                            <div className="font-medium">
-                                {client.salonName}
-                            </div>
+                            <div className="font-medium">{salon.name}</div>
                             <a
-                                href={`https://www.google.fr/maps/search/${encodeURIComponent(client.salonAddress)}`}
+                                href={`https://www.google.fr/maps/search/${encodeURIComponent(salon.address)}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-sm text-primary hover:underline">
-                                {client.salonAddress}
+                                {salon.address}
                             </a>
                         </div>
                     </div>
                     <div className="flex items-center gap-2 mt-3">
                         <Phone className="h-4 w-4 text-muted-foreground" />
                         <a
-                            href={`tel:${client.salonPhone}`}
+                            href={`tel:${salon.phone}`}
                             className="text-primary hover:underline">
-                            {client.salonPhone}
+                            {salon.phone}
                         </a>
                     </div>
                 </div>
