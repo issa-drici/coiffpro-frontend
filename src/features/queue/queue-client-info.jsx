@@ -4,11 +4,11 @@ import { useEffect, useState } from 'react'
 import { format, format as formatDate } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { Timer, UserCheck, MapPin, Phone } from 'lucide-react'
-import { useFindClient } from '@/services/queue/useFindClient'
 import { Skeleton } from '@/ui-components/skeleton'
 import { Alert, AlertDescription } from '@/ui-components/alert'
 import { AlertCircle } from 'lucide-react'
 import { useFindSalonInfo } from '@/services/salon/use-find-salon-info'
+import { useFindQueueClient } from '@/services/queue/use-find-queue-client'
 
 function useCountdown(targetDate) {
     const [timeLeft, setTimeLeft] = useState(null)
@@ -40,9 +40,13 @@ function useCountdown(targetDate) {
     return timeLeft
 }
 
-export function QueueClientInfo({ clientId }) {
-    const { data: client, isLoading, error } = useFindClient(clientId)
-    const timeLeft = useCountdown(client?.estimatedTime)
+export function QueueClientInfo({ queueClientId }) {
+    const {
+        data: queueClient,
+        isLoading,
+        error,
+    } = useFindQueueClient(queueClientId)
+    const timeLeft = useCountdown(queueClient?.estimatedTime)
     const { data: salonData } = useFindSalonInfo()
     const salon = salonData?.data || {
         name: 'Salon CoiffPro',
@@ -79,7 +83,7 @@ export function QueueClientInfo({ clientId }) {
         )
     }
 
-    if (!client) {
+    if (!queueClient) {
         return (
             <Alert>
                 <AlertCircle className="h-4 w-4" />
@@ -111,7 +115,10 @@ export function QueueClientInfo({ clientId }) {
             <div className="flex items-center justify-center">
                 <div className="flex items-center rounded-md bg-primary/10 px-4 py-2">
                     <span className="font-mono text-xl font-semibold tabular-nums">
-                        Ticket #{client.position.toString().padStart(3, '0')}
+                        Ticket #
+                        {queueClient?.ticket_number
+                            ?.toString()
+                            .padStart(3, '0')}
                     </span>
                 </div>
             </div>
@@ -121,7 +128,7 @@ export function QueueClientInfo({ clientId }) {
                 <div className="inline-flex flex-col items-center gap-4 bg-muted/50 rounded-lg p-8">
                     {/* Nom et prénom */}
                     <div className="text-lg font-semibold text-primary mb-2">
-                        {client.firstName} {client.lastName || ''}
+                        {queueClient.firstName} {queueClient.lastName || ''}
                     </div>
                     {/* Décompte */}
                     <div className="flex flex-col items-center gap-2">
@@ -133,15 +140,17 @@ export function QueueClientInfo({ clientId }) {
                             {formatTimeLeft()}
                         </div>
                         <div className="text-sm text-muted-foreground">
-                            Passage prévu à {formatTime(client.estimatedTime)}
+                            Passage prévu à{' '}
+                            {queueClient?.estimatedTime &&
+                                formatTime(queueClient?.estimatedTime)}
                         </div>
                     </div>
                     {/* Montant à payer */}
-                    {client.amountToPay && (
+                    {queueClient?.amountToPay && (
                         <div className="mt-4 text-base font-medium text-green-700 bg-green-100 rounded px-3 py-1">
                             Montant à régler :{' '}
                             <span className="font-bold">
-                                {client.amountToPay} €
+                                {queueClient?.amountToPay} €
                             </span>
                         </div>
                     )}
@@ -180,11 +189,11 @@ export function QueueClientInfo({ clientId }) {
                         Services
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
-                        {client.services.map((service, index) => (
+                        {queueClient?.services?.map((service, index) => (
                             <span
                                 key={index}
                                 className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
-                                {service}
+                                {service.name}
                             </span>
                         ))}
                     </div>
@@ -194,7 +203,8 @@ export function QueueClientInfo({ clientId }) {
             {/* Jour de passage tout en bas */}
             <div className="w-full flex justify-end mt-2">
                 <span className="text-xs text-muted-foreground italic">
-                    {formatDay(client.estimatedTime)}
+                    {queueClient?.estimatedTime &&
+                        formatDay(queueClient?.estimatedTime)}
                 </span>
             </div>
         </div>

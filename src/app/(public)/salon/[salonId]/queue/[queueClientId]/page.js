@@ -40,7 +40,7 @@ export default function SalonRegistrationPage({ params }) {
                     <div className="w-full md:max-w-6xl md:mx-auto space-y-6">
                         {/* Informations de la file d'attente */}
                         <QueueClientInfo
-                            clientId={params.clientId}
+                            queueClientId={params.queueClientId}
                             salonId={params.salonId}
                         />
 

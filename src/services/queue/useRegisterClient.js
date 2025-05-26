@@ -1,13 +1,21 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createQueueClient } from '@/utils/api-requests'
+import { useMutation } from '@tanstack/react-query'
 
-export function useRegisterClient() {
-    const queryClient = useQueryClient()
+export const useRegisterClient = ({ handleCallbackSuccess }) => {
+    // const { toast } = useToast() // tu peux le remettre si tu veux les toasts
 
     return useMutation({
-        mutationFn: ({ clientData }) => createQueueClient(clientData),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['queue'] })
+        mutationFn: data => createQueueClient(data),
+        onSuccess: async response => {
+            if (handleCallbackSuccess && response?.data?.id) {
+                handleCallbackSuccess(response.data.id)
+            }
+            // toast({ ... })
+            return true
+        },
+        onError: async () => {
+            // toast({ ... })
+            return false
         },
     })
 }

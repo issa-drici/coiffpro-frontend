@@ -21,7 +21,7 @@ import {
     Euro,
 } from 'lucide-react'
 import { formatPrice } from '@/lib/utils'
-import { format, addMinutes } from 'date-fns'
+import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import {
     Form,
@@ -32,6 +32,8 @@ import {
     FormDescription,
     FormMessage,
 } from '@/ui-components/form'
+import { useGetEstimatedTime } from '@/services/queue/useGetEstimatedTime'
+import { useRouter } from 'next/navigation'
 
 const formSchema = z.object({
     firstName: z
@@ -56,16 +58,23 @@ const formSchema = z.object({
             'Le numéro de téléphone ne doit contenir que des chiffres',
         ),
     services: z
-        .array(z.number())
+        .array(z.string())
         .min(1, 'Veuillez sélectionner au moins une prestation'),
 })
 
 export function RegistrationForm({ salonId }) {
-    const [isSuccess, setIsSuccess] = useState(false)
-    const { data: services, isLoading: isLoadingServices } = useGetServices()
-    const { mutate: registerClient, isLoading: isSubmitting } =
-        useRegisterClient()
+    const router = useRouter()
+    const [isSuccess] = useState(false)
+    const { data: services, isLoading: isLoadingServices } =
+        useGetServices(salonId)
+    const { mutateAsync: registerClient, isLoading: isSubmitting } =
+        useRegisterClient({
+            handleCallbackSuccess: (queueClientId) => {
+                router.push(`/salon/${salonId}/queue/${queueClientId}`)
+            },
+        })
     const [selectedServicesState, setSelectedServicesState] = useState([])
+    const { data: estimatedTimeData } = useGetEstimatedTime(salonId)
 
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -87,65 +96,28 @@ export function RegistrationForm({ salonId }) {
     }, [selectedServicesState])
 
     const totalPrice = selectedServicesState.reduce((total, serviceId) => {
-        const service = services?.find(s => s.id === serviceId)
-        return total + (service?.price || 0)
+        const service = services?.data?.find(s => s.id === serviceId)
+        return total + (parseFloat(service?.price) || 0)
     }, 0)
 
     // Vérification si le formulaire est valide
     const isFormValid =
         form.formState.isValid && selectedServicesState.length > 0
 
-    const onSubmit = data => {
-        registerClient(
-            {
+    const onSubmit = async data => {
+        try {
+            await registerClient({
                 salonId,
-                clientData: {
-                    ...data,
-                    services: data.services.map(
-                        id => services.find(s => s.id === id).name,
-                    ),
-                },
-            },
-            {
-                onSuccess: () => setIsSuccess(true),
-            },
-        )
+                ...data,
+                services: data.services,
+            })
+        } catch (error) {
+            // Les erreurs sont déjà gérées dans le hook (toast)
+        }
     }
 
     if (isSuccess) {
-        return (
-            <div className="text-center space-y-6 py-8 md:py-12">
-                <div className="rounded-full bg-green-100 p-4 mx-auto w-fit md:p-6">
-                    <svg
-                        className="h-8 w-8 text-green-600 md:h-10 md:w-10"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M5 13l4 4L19 7"
-                        />
-                    </svg>
-                </div>
-                <div className="space-y-2">
-                    <h2 className="text-xl font-bold text-green-600 md:text-3xl">
-                        Inscription réussie !
-                    </h2>
-                    <p className="text-sm text-muted-foreground md:text-base max-w-md mx-auto">
-                        Vous avez été ajouté à la file d'attente. Nous vous
-                        contacterons bientôt.
-                    </p>
-                </div>
-                <Button
-                    variant="outline"
-                    className="mt-6 md:mt-8"
-                    onClick={() => setIsSuccess(false)}>
-                    Nouvelle inscription
-                </Button>
-            </div>
-        )
+        return null // On ne montre plus le message de succès, la redirection est automatique
     }
 
     return (
@@ -304,86 +276,87 @@ export function RegistrationForm({ salonId }) {
                                         name="services"
                                         render={() => (
                                             <div className="space-y-3 md:space-y-4">
-                                                {services?.map(service => {
-                                                    const id = Number(
-                                                        service.id,
-                                                    )
-                                                    const isChecked =
-                                                        selectedServicesState.includes(
-                                                            id,
-                                                        )
-                                                    return (
-                                                        <FormItem
-                                                            key={id}
-                                                            className="flex items-center space-x-4 rounded-lg border p-4 transition-colors hover:bg-muted/50 cursor-pointer md:p-5"
-                                                            onClick={e => {
-                                                                if (
-                                                                    e.target.closest(
-                                                                        'input[type="checkbox"]',
-                                                                    )
-                                                                )
-                                                                    return
-                                                                setSelectedServicesState(
-                                                                    current =>
-                                                                        isChecked
-                                                                            ? current.filter(
-                                                                                  val =>
-                                                                                      val !==
-                                                                                      id,
-                                                                              )
-                                                                            : [
-                                                                                  ...current,
-                                                                                  id,
-                                                                              ],
-                                                                )
-                                                            }}>
-                                                            <FormControl>
-                                                                <Checkbox
-                                                                    id={`service-${id}`}
-                                                                    value={id}
-                                                                    checked={
-                                                                        isChecked
-                                                                    }
-                                                                    onCheckedChange={checked => {
-                                                                        setSelectedServicesState(
-                                                                            current =>
-                                                                                checked
-                                                                                    ? [
-                                                                                          ...current,
-                                                                                          id,
-                                                                                      ]
-                                                                                    : current.filter(
-                                                                                          val =>
-                                                                                              val !==
-                                                                                              id,
-                                                                                      ),
+                                                {services?.data?.map(
+                                                    service => {
+                                                        const isChecked =
+                                                            selectedServicesState.includes(
+                                                                service.id,
+                                                            )
+                                                        return (
+                                                            <FormItem
+                                                                key={service.id}
+                                                                className="flex items-center space-x-4 rounded-lg border p-4 transition-colors hover:bg-muted/50 cursor-pointer md:p-5"
+                                                                onClick={e => {
+                                                                    if (
+                                                                        e.target.closest(
+                                                                            'input[type="checkbox"]',
                                                                         )
-                                                                    }}
-                                                                />
-                                                            </FormControl>
-                                                            <div className="flex-1 min-w-0">
-                                                                <div className="flex items-center gap-2">
-                                                                    <span className="font-medium md:text-base">
-                                                                        {
-                                                                            service.name
+                                                                    )
+                                                                        return
+                                                                    setSelectedServicesState(
+                                                                        current =>
+                                                                            isChecked
+                                                                                ? current.filter(
+                                                                                      val =>
+                                                                                          val !==
+                                                                                          service.id,
+                                                                                  )
+                                                                                : [
+                                                                                      ...current,
+                                                                                      service.id,
+                                                                                  ],
+                                                                    )
+                                                                }}>
+                                                                <FormControl>
+                                                                    <Checkbox
+                                                                        id={`service-${service.id}`}
+                                                                        value={
+                                                                            service.id
                                                                         }
-                                                                    </span>
+                                                                        checked={
+                                                                            isChecked
+                                                                        }
+                                                                        onCheckedChange={checked => {
+                                                                            setSelectedServicesState(
+                                                                                current =>
+                                                                                    checked
+                                                                                        ? [
+                                                                                              ...current,
+                                                                                              service.id,
+                                                                                          ]
+                                                                                        : current.filter(
+                                                                                              val =>
+                                                                                                  val !==
+                                                                                                  service.id,
+                                                                                          ),
+                                                                            )
+                                                                        }}
+                                                                    />
+                                                                </FormControl>
+                                                                <div className="flex-1 min-w-0">
+                                                                    <div className="flex items-center gap-2">
+                                                                        <span className="font-medium md:text-base">
+                                                                            {
+                                                                                service.name
+                                                                            }
+                                                                        </span>
+                                                                    </div>
+                                                                    <p className="text-sm text-muted-foreground">
+                                                                        {
+                                                                            service.duration
+                                                                        }{' '}
+                                                                        min
+                                                                    </p>
                                                                 </div>
-                                                                <p className="text-sm text-muted-foreground">
-                                                                    {
-                                                                        service.duration
-                                                                    }{' '}
-                                                                    min
-                                                                </p>
-                                                            </div>
-                                                            <span className="font-semibold shrink-0 md:text-lg">
-                                                                {formatPrice(
-                                                                    service.price,
-                                                                )}
-                                                            </span>
-                                                        </FormItem>
-                                                    )
-                                                })}
+                                                                <span className="font-semibold shrink-0 md:text-lg">
+                                                                    {formatPrice(
+                                                                        service.price,
+                                                                    )}
+                                                                </span>
+                                                            </FormItem>
+                                                        )
+                                                    },
+                                                )}
                                                 {(form.formState.touchedFields
                                                     .services ||
                                                     form.formState
@@ -415,7 +388,7 @@ export function RegistrationForm({ salonId }) {
                                                 {selectedServicesState.reduce(
                                                     (total, id) =>
                                                         total +
-                                                        (services?.find(
+                                                        (services?.data?.find(
                                                             s => s.id === id,
                                                         )?.duration || 0),
                                                     0,
@@ -426,14 +399,23 @@ export function RegistrationForm({ salonId }) {
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center gap-2 text-muted-foreground">
                                                 <Calendar className="h-4 w-4" />
-                                                <span>Passage estimé</span>
+                                                <span>
+                                                    Temps d'attente estimé
+                                                </span>
                                             </div>
                                             <span className="font-medium">
-                                                {format(
-                                                    addMinutes(new Date(), 30),
-                                                    'HH:mm',
-                                                    { locale: fr },
-                                                )}
+                                                {estimatedTimeData?.data
+                                                    ?.estimatedTime
+                                                    ? format(
+                                                          new Date(
+                                                              estimatedTimeData.data.estimatedTime,
+                                                          ),
+                                                          'HH:mm',
+                                                          {
+                                                              locale: fr,
+                                                          },
+                                                      )
+                                                    : 'Calcul en cours...'}
                                             </span>
                                         </div>
                                         <div className="flex items-center justify-between pt-2 border-t">

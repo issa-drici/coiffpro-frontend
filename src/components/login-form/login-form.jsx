@@ -47,7 +47,7 @@ export function LoginForm({ className, ...props }) {
         } catch (error) {
             if (error?.response?.data?.errors) {
                 // Erreur Axios avec des erreurs de validation
-                setErrors(error.response.data.errors)
+            setErrors(error.response.data.errors)
             } else if (error?.response?.data?.message) {
                 // Erreur Axios avec un message d'erreur
                 setErrors({ general: error.response.data.message })

@@ -74,7 +74,7 @@ export async function getFAQ() {
  */
 export async function getVisitorStats({ startDate, endDate }) {
     const response = await axios.get('/api/stats/visitors', {
-        params: { startDate, endDate }
+        params: { startDate, endDate },
     })
     return response.data
 }
@@ -127,16 +127,17 @@ export async function deleteService(id) {
 }
 
 /**
- * Crée un nouveau client dans la file d'attente
+ * Crée un nouveau client dans la file d'attente d'un salon
+ * @param {string} salonId - ID du salon
  * @param {Object} clientData - Données du client
- * @param {string} clientData.firstName - Prénom du client
- * @param {string} [clientData.lastName] - Nom du client (optionnel)
- * @param {string} clientData.phoneNumber - Numéro de téléphone
- * @param {Array<string>} clientData.services - Liste des services demandés
  * @returns {Promise<{data: QueueClient}>}
  */
-export async function createQueueClient(clientData) {
-    const response = await axios.post('/api/queue', clientData)
+export async function createQueueClient(data) {
+    const { salonId, ...clientData } = data
+    const response = await axios.post(
+        `/api/salons/${salonId}/queue`,
+        clientData,
+    )
     return response.data
 }
 
@@ -163,5 +164,35 @@ export async function updateQueueClient(data) {
  */
 export async function deleteQueueClient(clientId) {
     const response = await axios.delete(`/api/queue/${clientId}`)
+    return response.data
+}
+
+/**
+ * Récupère les prestations d'un salon spécifique
+ * @param {string} salonId - ID du salon
+ * @returns {Promise<{data: Array<Service>}>}
+ */
+export async function getSalonServices(salonId) {
+    const response = await axios.get(`/api/salons/${salonId}/services`)
+    return response.data
+}
+
+/**
+ * Récupère le temps estimé avant que tous les clients actuels soient servis
+ * @param {string} salonId - ID du salon
+ * @returns {Promise<{data: {estimatedTime: string}}>}
+ */
+export async function getEstimatedTime(salonId) {
+    const response = await axios.get(`/api/salons/${salonId}/estimated-time`)
+    return response.data
+}
+
+/**
+ * Récupère les infos d'un client de la file d'attente
+ * @param {string} queueClientId - ID du client
+ * @returns {Promise<{data: QueueClient}>}
+ */
+export async function getQueueClient(queueClientId) {
+    const response = await axios.get(`/api/queue/${queueClientId}`)
     return response.data
 }

@@ -1,27 +1,13 @@
+'use client'
+
 import { useQuery } from '@tanstack/react-query'
+import { getSalonServices } from '@/utils/api-requests'
 
-// Mock des données pour le développement
-const mockServices = [
-    { id: 1, name: 'Coupe homme', price: 20, duration: 20 },
-    { id: 2, name: 'Coupe femme', price: 30, duration: 30 },
-    { id: 3, name: 'Barbe', price: 10, duration: 15 },
-    { id: 4, name: 'Brushing', price: 18, duration: 25 },
-    { id: 5, name: 'Coloration', price: 40, duration: 45 },
-    { id: 6, name: 'Mèches', price: 50, duration: 60 },
-]
-
-export function useGetServices() {
+export function useGetServices(salonId) {
     return useQuery({
-        queryKey: ['services'],
-        queryFn: async () => {
-            // TODO: Remplacer par l'appel API réel
-            // const response = await fetch('/api/services')
-            // if (!response.ok) throw new Error('Erreur lors de la récupération des services')
-            // return response.json()
-
-            // Simulation d'un délai réseau
-            await new Promise(resolve => setTimeout(resolve, 500))
-            return mockServices
-        },
+        queryKey: ['salon', salonId, 'services'],
+        queryFn: () => getSalonServices(salonId),
+        enabled: !!salonId, // La requête ne s'exécute que si salonId est défini
+        staleTime: 1000 * 60 * 5, // 5 minutes
     })
 }

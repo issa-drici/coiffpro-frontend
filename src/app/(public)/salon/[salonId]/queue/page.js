@@ -39,7 +39,7 @@ export default function SalonRegistrationPage({ params }) {
                     {/* Carte du formulaire avec ombre adaptative */}
                     <div className="w-full md:max-w-6xl md:mx-auto">
                         <div className="rounded-lg border bg-card p-4 shadow-sm md:border-0 md:shadow-none md:p-0">
-                            <RegistrationForm salonId={params.id} />
+                            <RegistrationForm salonId={params.salonId} />
                         </div>
 
                         {/* Footer avec informations supplémentaires */}
