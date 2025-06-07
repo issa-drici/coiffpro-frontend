@@ -46,8 +46,7 @@ export function ServiceForm({ service, onClose, setIsOpen }) {
 
     const { mutate: createService, isLoading: isCreating } = useCreateService({
         onSuccess: () => {
-            toast({
-                title: 'Prestation créée',
+            toast.success('Prestation créée', {
                 description: 'La prestation a été créée avec succès.',
             })
             setIsOpen(false)
@@ -56,8 +55,7 @@ export function ServiceForm({ service, onClose, setIsOpen }) {
 
     const { mutate: updateService, isLoading: isUpdating } = useUpdateService({
         onSuccess: () => {
-            toast({
-                title: 'Prestation mise à jour',
+            toast.success('Prestation mise à jour', {
                 description: 'La prestation a été mise à jour avec succès.',
             })
             setIsOpen(false)

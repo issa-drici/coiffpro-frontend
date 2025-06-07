@@ -4,14 +4,14 @@ import { toast } from 'sonner'
 import { takeClient } from '@/utils/api-requests'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-export const useTakeClient = ({ handleCallbackSuccess } = {}) => {
+export const useTakeClient = ({ onSuccess } = {}) => {
     const queryClient = useQueryClient()
 
     return useMutation({
         mutationFn: (clientId) => takeClient(clientId),
-        onSuccess: async (response, variables) => {
-            if (handleCallbackSuccess !== undefined) {
-                handleCallbackSuccess(response, variables)
+        onSuccess: async (...args) => {
+            if (onSuccess) {
+                onSuccess(...args)
             }
             toast.success('Client pris en charge', {
                 description: 'Le client a été pris en charge avec succès.',

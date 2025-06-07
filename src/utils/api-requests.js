@@ -4,8 +4,8 @@ import axios from '@/lib/axios'
  * Récupère la liste des clients en file d'attente
  * @returns {Promise<{data: Array<QueueClient>}>}
  */
-export async function getQueue() {
-    const response = await axios.get('/api/queue')
+export async function getQueue(salonId) {
+    const response = await axios.get(`/api/queue/${salonId}`)
     return response.data
 }
 

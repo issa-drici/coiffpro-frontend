@@ -57,7 +57,7 @@ export const mockQueueData = [
         registrationTime: '2024-03-20T10:15:00',
         position: 5,
         estimatedTime: '2024-03-20T12:30:00',
-        status: 'waiting',
+        status: 'completed',
         estimatedDuration: 60,
     },
     {

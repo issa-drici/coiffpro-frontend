@@ -9,26 +9,7 @@ import { Clock, Phone, Scissors, Timer, User } from 'lucide-react'
 import { useTakeClient } from '@/services/queue/useTakeClient'
 import { useMarkClientAbsent } from '@/services/queue/useMarkClientAbsent'
 import { useState } from 'react'
-import { useMediaQuery } from '@/hooks/use-media-query'
 import { useFindServiceConfig } from '@/services/services/use-find-service-config'
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogDescription,
-    DialogTrigger,
-} from '@/ui-components/dialog'
-import {
-    Drawer,
-    DrawerClose,
-    DrawerContent,
-    DrawerDescription,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerTitle,
-    DrawerTrigger,
-} from '@/ui-components/drawer'
 import { ResponsiveDialog } from '@/components/responsive-dialog'
 
 export function QueueItem({ client, isCurrentClient = false }) {
@@ -38,7 +19,7 @@ export function QueueItem({ client, isCurrentClient = false }) {
         useMarkClientAbsent()
     const [openDialog, setOpenDialog] = useState(false)
     const [openAbsentDialog, setOpenAbsentDialog] = useState(false)
-    const isDesktop = useMediaQuery('(min-width: 768px)')
+
     const { data: serviceConfig } = useFindServiceConfig()
 
     const formatTime = dateString => {
@@ -65,50 +46,23 @@ export function QueueItem({ client, isCurrentClient = false }) {
 
     // Composant de confirmation responsive
     function ConfirmTakeDialog({ trigger }) {
-        if (isDesktop) {
-            return (
-                <ResponsiveDialog
-                    open={openDialog}
-                    onOpenChange={setOpenDialog}
-                    trigger={trigger}
-                    title="Confirmer la prise en charge"
-                    description="Cette action mettra fin à la prestation du client actuellement en cours. Êtes-vous sûr de vouloir prendre en charge ce client ?"
-                    size="sm"
-                    actions={{
-                        cancel: (
-                            <Button
-                                variant="outline"
-                                onClick={() => setOpenDialog(false)}>
-                                Annuler
-                            </Button>
-                        ),
-                        confirm: (
-                            <Button
-                                onClick={() => {
-                                    setOpenDialog(false)
-                                    handleTakeClient(client.id)
-                                }}
-                                variant="default">
-                                Confirmer
-                            </Button>
-                        ),
-                    }}
-                />
-            )
-        }
         return (
-            <Drawer open={openDialog} onOpenChange={setOpenDialog}>
-                <DrawerTrigger asChild>{trigger}</DrawerTrigger>
-                <DrawerContent>
-                    <DrawerHeader className="text-left">
-                        <DrawerTitle>Confirmer la prise en charge</DrawerTitle>
-                        <DrawerDescription>
-                            Cette action mettra fin à la prestation du client
-                            actuellement en cours. Êtes-vous sûr de vouloir
-                            prendre en charge ce client&nbsp;?
-                        </DrawerDescription>
-                    </DrawerHeader>
-                    <DrawerFooter className="pt-2">
+            <ResponsiveDialog
+                open={openDialog}
+                onOpenChange={setOpenDialog}
+                trigger={trigger}
+                title="Confirmer la prise en charge"
+                description="Cette action mettra fin à la prestation du client actuellement en cours. Êtes-vous sûr de vouloir prendre en charge ce client ?"
+                size="lg"
+                actions={{
+                    cancel: (
+                        <Button
+                            variant="outline"
+                            onClick={() => setOpenDialog(false)}>
+                            Annuler
+                        </Button>
+                    ),
+                    confirm: (
                         <Button
                             onClick={() => {
                                 setOpenDialog(false)
@@ -117,61 +71,38 @@ export function QueueItem({ client, isCurrentClient = false }) {
                             variant="default">
                             Confirmer
                         </Button>
-                        <DrawerClose asChild>
-                            <Button variant="outline">Annuler</Button>
-                        </DrawerClose>
-                    </DrawerFooter>
-                </DrawerContent>
-            </Drawer>
+                    ),
+                }}>
+                <div className="mt-4 text-center">
+                    <p className="text-lg font-semibold text-primary">
+                        <span className="font-mono bg-primary/10 px-2 py-1 rounded-md mr-2">
+                            #{client.position.toString().padStart(3, '0')}
+                        </span>
+                        {client.firstName || 'Client'} {client.lastName || ''}
+                    </p>
+                </div>
+            </ResponsiveDialog>
         )
     }
 
     function ConfirmAbsentDialog({ trigger }) {
-        if (isDesktop) {
-            return (
-                <Dialog
-                    open={openAbsentDialog}
-                    onOpenChange={setOpenAbsentDialog}>
-                    <DialogTrigger asChild>{trigger}</DialogTrigger>
-                    <DialogContent className="sm:max-w-[400px]">
-                        <DialogHeader>
-                            <DialogTitle>Confirmer l'absence</DialogTitle>
-                            <DialogDescription>
-                                Cette action marquera ce client comme absent.
-                                Êtes-vous sûr de vouloir continuer&nbsp;?
-                            </DialogDescription>
-                        </DialogHeader>
-                        <div className="flex justify-end gap-2 mt-4">
-                            <Button
-                                onClick={() => {
-                                    setOpenAbsentDialog(false)
-                                    handleMarkAbsent(client.id)
-                                }}
-                                variant="destructive">
-                                Confirmer
-                            </Button>
-                            <Button
-                                variant="outline"
-                                onClick={() => setOpenAbsentDialog(false)}>
-                                Annuler
-                            </Button>
-                        </div>
-                    </DialogContent>
-                </Dialog>
-            )
-        }
         return (
-            <Drawer open={openAbsentDialog} onOpenChange={setOpenAbsentDialog}>
-                <DrawerTrigger asChild>{trigger}</DrawerTrigger>
-                <DrawerContent>
-                    <DrawerHeader className="text-left">
-                        <DrawerTitle>Confirmer l'absence</DrawerTitle>
-                        <DrawerDescription>
-                            Cette action marquera ce client comme absent.
-                            Êtes-vous sûr de vouloir continuer&nbsp;?
-                        </DrawerDescription>
-                    </DrawerHeader>
-                    <DrawerFooter className="pt-2">
+            <ResponsiveDialog
+                open={openAbsentDialog}
+                onOpenChange={setOpenAbsentDialog}
+                trigger={trigger}
+                title="Confirmer l'absence"
+                description="Cette action marquera ce client comme absent. Êtes-vous sûr de vouloir continuer ?"
+                size="lg"
+                actions={{
+                    cancel: (
+                        <Button
+                            variant="outline"
+                            onClick={() => setOpenAbsentDialog(false)}>
+                            Annuler
+                        </Button>
+                    ),
+                    confirm: (
                         <Button
                             onClick={() => {
                                 setOpenAbsentDialog(false)
@@ -180,21 +111,22 @@ export function QueueItem({ client, isCurrentClient = false }) {
                             variant="destructive">
                             Confirmer
                         </Button>
-                        <DrawerClose asChild>
-                            <Button variant="outline">Annuler</Button>
-                        </DrawerClose>
-                    </DrawerFooter>
-                </DrawerContent>
-            </Drawer>
+                    ),
+                }}>
+                <div className="mt-4 text-center">
+                    <p className="text-lg font-semibold text-primary">
+                        <span className="font-mono bg-primary/10 px-2 py-1 rounded-md mr-2">
+                            #{client.position.toString().padStart(3, '0')}
+                        </span>
+                        {client.firstName || 'Client'} {client.lastName || ''}
+                    </p>
+                </div>
+            </ResponsiveDialog>
         )
     }
 
     const trigger = (
-        <Button
-            variant="default"
-            onClick={() => setOpenDialog(true)}
-            className="flex-1"
-            disabled={isCurrentClient}>
+        <Button variant="default" className="flex-1" disabled={isCurrentClient}>
             Prendre en charge
         </Button>
     )

@@ -23,8 +23,7 @@ export function ServiceList({ onEdit }) {
     const { data: services, isLoading } = useFindAllServices()
     const { mutate: deleteService, isLoading: isDeleting } = useDeleteService({
         onSuccess: () => {
-            toast({
-                title: 'Prestation supprimée',
+            toast.success('Prestation supprimée', {
                 description: 'La prestation a été supprimée avec succès.',
             })
             setServiceToDelete(null)

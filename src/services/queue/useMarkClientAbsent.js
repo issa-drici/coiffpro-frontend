@@ -4,14 +4,14 @@ import { toast } from 'sonner'
 import { markClientAbsent } from '@/utils/api-requests'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-export const useMarkClientAbsent = ({ handleCallbackSuccess } = {}) => {
+export const useMarkClientAbsent = ({ onSuccess } = {}) => {
     const queryClient = useQueryClient()
 
     return useMutation({
         mutationFn: (clientId) => markClientAbsent(clientId),
-        onSuccess: async (response, variables) => {
-            if (handleCallbackSuccess !== undefined) {
-                handleCallbackSuccess(response, variables)
+        onSuccess: async (...args) => {
+            if (onSuccess) {
+                onSuccess(...args)
             }
             toast.success('Client marqué comme absent', {
                 description: 'Le client a été marqué comme absent.',

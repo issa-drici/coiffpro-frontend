@@ -61,7 +61,7 @@ function QueueStats({ data }) {
     }, [data])
 
     return (
-        <div className="dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-4 mb-6">
+        <div className="dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 *:data-[slot=card]:shadow-xs @xl/main:grid-cols-4 mb-6">
             <Card className="@container/card">
                 <CardHeader>
                     <CardDescription>En attente</CardDescription>
@@ -101,8 +101,8 @@ function QueueStats({ data }) {
 
 let delayId = 0
 
-export function QueueList() {
-    const { data: queueData, isLoading, error } = useFindQueue()
+export function QueueList({ salonId }) {
+    const { data: queueData, isLoading, error } = useFindQueue(salonId)
     const isDesktop = useMediaQuery('(min-width: 768px)')
 
     // État local pour la démo
@@ -189,7 +189,7 @@ export function QueueList() {
     return (
         <div className="space-y-6">
             {/* BARRE D'ACTIONS GROS BOUTONS */}
-            <div className="flex flex-col sm:flex-row gap-4 px-4 lg:px-6 mt-2 mb-4">
+            <div className="flex flex-col sm:flex-row gap-4 mt-2 mb-4">
                 {/* <Button
                     variant={serviceActive ? 'secondary' : 'default'}
                     onClick={handleStartService}
@@ -203,14 +203,14 @@ export function QueueList() {
                 <Button
                     variant="outline"
                     onClick={handleAddDelay}
-                    className="flex items-center justify-center text-lg font-semibold py-4 px-6 gap-3 w-full sm:w-auto rounded-2xl shadow-md">
+                    className="flex items-center justify-center text-lg font-semibold gap-3 w-full sm:w-auto rounded-2xl shadow-md">
                     <Clock className="h-7 w-7" />
                     Ajouter 10 min de retard
                 </Button>
                 <Button
                     variant="outline"
                     onClick={handleRemoveDelay}
-                    className="flex items-center justify-center text-lg font-semibold py-4 px-6 gap-3 w-full sm:w-auto rounded-2xl shadow-md">
+                    className="flex items-center justify-center text-lg font-semibold gap-3 w-full sm:w-auto rounded-2xl shadow-md">
                     <Clock className="h-7 w-7" />
                     Retirer 10 min d'attente
                 </Button>
@@ -231,10 +231,10 @@ export function QueueList() {
             {/* CLIENT EN COURS + RETARD */}
             {currentClient && (
                 <div className="mb-6">
-                    <h2 className="text-lg font-semibold mb-4 px-4 lg:px-6">
+                    <h2 className="text-lg font-semibold mb-4">
                         Client en cours
                     </h2>
-                    <div className="px-4 lg:px-6">
+                    <div>
                         <QueueItem
                             client={currentClient}
                             isCurrentClient={true}
@@ -273,7 +273,7 @@ export function QueueList() {
                             </AlertDescription>
                         </Alert>
                     ) : (
-                        <div className="grid grid-cols-1 gap-4 px-4 lg:px-6">
+                        <div className="grid grid-cols-1 gap-4">
                             {waitingClients.map(client => (
                                 <QueueItem key={client.id} client={client} />
                             ))}
@@ -288,7 +288,7 @@ export function QueueList() {
                             </AlertDescription>
                         </Alert>
                     ) : (
-                        <div className="grid grid-cols-1 gap-4 px-4 lg:px-6">
+                        <div className="grid grid-cols-1 gap-4">
                             {completedClients.map(client => (
                                 <QueueItem key={client.id} client={client} />
                             ))}
@@ -337,7 +337,7 @@ function AnimatedDelayBlock({ expiresAt, showTimer, onRemove }) {
     return (
         <div
             ref={ref}
-            className={`w-full bg-yellow-100 text-yellow-800 font-semibold rounded-xl px-4 py-3 text-base shadow border border-yellow-300 flex items-center transition-all duration-300 ease-out
+            className={`w-full bg-yellow-100 text-yellow-800 font-semibold rounded-xl py-3 text-base shadow border border-yellow-300 flex items-center transition-all duration-300 ease-out
                 ${show ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-75 -translate-y-10'}`}
             style={{ willChange: 'opacity, transform' }}>
             <div className="flex-1 text-left select-none text-base font-bold">

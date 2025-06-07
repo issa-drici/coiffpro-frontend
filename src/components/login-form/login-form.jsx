@@ -13,7 +13,7 @@ export function LoginForm({ className, ...props }) {
 
     const { login } = useAuth({
         middleware: 'guest',
-        redirectIfAuthenticated: '/admin/dashboard',
+        redirectIfAuthenticated: '/admin/queue',
     })
 
     const [email, setEmail] = useState('')

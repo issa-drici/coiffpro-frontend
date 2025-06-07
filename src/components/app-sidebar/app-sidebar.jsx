@@ -2,7 +2,6 @@ import * as React from 'react'
 import {
     IconCamera,
     IconChartBar,
-    IconDashboard,
     IconFileAi,
     IconFileDescription,
     IconHelp,
@@ -33,11 +32,11 @@ const data = {
         avatar: '/avatars/shadcn.jpg',
     },
     navMain: [
-        {
-            title: 'Dashboard',
-            url: '/admin/dashboard',
-            icon: IconDashboard,
-        },
+        // {
+        //     title: 'Dashboard',
+        //     url: '/admin/dashboard',
+        //     icon: IconDashboard,
+        // },
         {
             title: 'Prestations',
             url: '/admin/services',
