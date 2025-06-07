@@ -34,7 +34,7 @@ const serviceSchema = z.object({
         .optional(),
 })
 
-export function ServiceForm({ service, onClose, setIsOpen }) {
+export function ServiceForm({ service, onClose, setIsOpen, salonId }) {
     const form = useForm({
         resolver: zodResolver(serviceSchema),
         defaultValues: {
@@ -45,6 +45,7 @@ export function ServiceForm({ service, onClose, setIsOpen }) {
     })
 
     const { mutate: createService, isLoading: isCreating } = useCreateService({
+        salonId,
         onSuccess: () => {
             toast.success('Prestation créée', {
                 description: 'La prestation a été créée avec succès.',
@@ -54,6 +55,7 @@ export function ServiceForm({ service, onClose, setIsOpen }) {
     })
 
     const { mutate: updateService, isLoading: isUpdating } = useUpdateService({
+        salonId,
         onSuccess: () => {
             toast.success('Prestation mise à jour', {
                 description: 'La prestation a été mise à jour avec succès.',

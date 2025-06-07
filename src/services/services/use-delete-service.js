@@ -3,16 +3,19 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { deleteService } from '@/utils/api-requests'
 
-export const useDeleteService = ({ onSuccess } = {}) => {
+export const useDeleteService = ({ salonId, onSuccess } = {}) => {
     const queryClient = useQueryClient()
 
     return useMutation({
         mutationFn: (serviceId) => deleteService(serviceId),
-        onSuccess: (...args) => {
+        onSuccess: async (...args) => {
             if (onSuccess) {
                 onSuccess(...args)
             }
-            queryClient.invalidateQueries({ queryKey: ['services'] })
+            await queryClient.invalidateQueries({
+                queryKey: ['salon', salonId, 'services'],
+                exact: true
+            })
         },
     })
 }

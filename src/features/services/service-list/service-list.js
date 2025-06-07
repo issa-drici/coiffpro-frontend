@@ -12,16 +12,18 @@ import {
 import { Button } from '@/ui-components/button'
 import { Edit, Trash2 } from 'lucide-react'
 import { useDeleteService } from '@/services/services/use-delete-service'
-import { useFindAllServices } from '@/services/services/use-find-all-services'
 import { formatPrice } from '@/utils/format'
 import { Skeleton } from '@/ui-components/skeleton'
 import { toast } from 'sonner'
 import { ResponsiveDialog } from '@/components/responsive-dialog'
+import { useGetServices } from '@/services/services/useGetServices'
 
-export function ServiceList({ onEdit }) {
+export function ServiceList({ onEdit, salonId }) {
     const [serviceToDelete, setServiceToDelete] = useState(null)
-    const { data: services, isLoading } = useFindAllServices()
+    const { data: services, isLoading: isLoadingServices } =
+        useGetServices(salonId)
     const { mutate: deleteService, isLoading: isDeleting } = useDeleteService({
+        salonId,
         onSuccess: () => {
             toast.success('Prestation supprimée', {
                 description: 'La prestation a été supprimée avec succès.',
@@ -30,7 +32,7 @@ export function ServiceList({ onEdit }) {
         },
     })
 
-    if (isLoading) {
+    if (isLoadingServices) {
         return (
             <div className="p-4">
                 <div className="space-y-3">

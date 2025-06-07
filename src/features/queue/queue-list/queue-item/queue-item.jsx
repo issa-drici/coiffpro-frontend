@@ -88,7 +88,7 @@ export function QueueItem({ client, isCurrentClient = false }) {
     function ConfirmAbsentDialog({ trigger }) {
         return (
             <ResponsiveDialog
-                open={openAbsentDialog}
+
                 onOpenChange={setOpenAbsentDialog}
                 trigger={trigger}
                 title="Confirmer l'absence"
