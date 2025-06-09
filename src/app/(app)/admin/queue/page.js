@@ -1,5 +1,5 @@
-import { SiteHeader } from '@/components/site-header'
-import { QueueSheet } from '@/features/queue'
+import { SiteHeader } from "@/components/site-header";
+import { QueueSheet } from "@/features/queue";
 
 export default function QueuePage() {
     return (
@@ -7,5 +7,5 @@ export default function QueuePage() {
             <SiteHeader name="Liste d'attente" />
             <QueueSheet />
         </>
-    )
+    );
 }

@@ -1,46 +1,46 @@
-'use client'
+"use client";
 
-import { QueueItem } from '@/features/queue/queue-list/queue-item'
-import { Skeleton } from '@/ui-components/skeleton'
-import { Alert, AlertDescription } from '@/ui-components/alert'
-import { AlertCircle, Clock, Timer, X } from 'lucide-react'
+import { QueueItem } from "@/features/queue/queue-list/queue-item";
+import { Skeleton } from "@/ui-components/skeleton";
+import { Alert, AlertDescription } from "@/ui-components/alert";
+import { AlertCircle, Clock, Timer, X } from "lucide-react";
 import {
     Card,
     CardHeader,
     CardTitle,
     CardDescription,
-} from '@/ui-components/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/ui-components/tabs'
-import { useMemo, useState, useEffect, useRef } from 'react'
-import { useFindQueue } from '@/services/queue/useFindQueue'
-import { Button } from '@/ui-components/button'
-import { useMediaQuery } from '@/hooks/use-media-query'
+} from "@/ui-components/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/ui-components/tabs";
+import { useMemo, useState, useEffect, useRef } from "react";
+import { useFindWaitingQueueBySalonId } from "@/services/queue/use-find-waiting-queue-by-salonId";
+import { Button } from "@/ui-components/button";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 function formatDuration(minutes) {
-    if (minutes < 60) return `${minutes} min`
-    const h = Math.floor(minutes / 60)
-    const m = minutes % 60
-    return m === 0 ? `${h}h` : `${h}h ${m} min`
+    if (minutes < 60) return `${minutes} min`;
+    const h = Math.floor(minutes / 60);
+    const m = minutes % 60;
+    return m === 0 ? `${h}h` : `${h}h ${m} min`;
 }
 
 function QueueStats({ data }) {
     const stats = useMemo(() => {
         const waiting =
-            data?.filter(client => client.status === 'waiting') || []
+            data?.filter(client => client.status === "waiting") || [];
         const completed =
-            data?.filter(client => client.status === 'completed') || []
+            data?.filter(client => client.status === "completed") || [];
         const inProgress =
-            data?.filter(client => client.status === 'in_progress') || []
+            data?.filter(client => client.status === "in_progress") || [];
         const totalRest =
             data?.filter(
                 client =>
-                    client.status === 'waiting' ||
-                    client.status === 'in_progress',
-            ) || []
+                    client.status === "waiting" ||
+                    client.status === "in_progress",
+            ) || [];
         const totalDuration = totalRest.reduce(
             (acc, client) => acc + (client.estimatedDuration || 0),
             0,
-        )
+        );
         const averageWaitTime =
             waiting.length > 0
                 ? Math.round(
@@ -50,15 +50,15 @@ function QueueStats({ data }) {
                           0,
                       ) / waiting.length,
                   )
-                : 0
+                : 0;
         return {
             waiting: waiting.length,
             completed: completed.length,
             inProgress: inProgress.length,
             totalDuration,
             averageWaitTime,
-        }
-    }, [data])
+        };
+    }, [data]);
 
     return (
         <div className="dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 *:data-[slot=card]:shadow-xs @xl/main:grid-cols-4 mb-6">
@@ -72,7 +72,7 @@ function QueueStats({ data }) {
             </Card>
             <Card className="@container/card">
                 <CardHeader>
-                    <CardDescription>Temps d'attente moyen</CardDescription>
+                    <CardDescription>Temps d&apos;attente moyen</CardDescription>
                     <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
                         {stats.averageWaitTime} min
                     </CardTitle>
@@ -80,7 +80,7 @@ function QueueStats({ data }) {
             </Card>
             <Card className="@container/card">
                 <CardHeader>
-                    <CardDescription>Terminés aujourd'hui</CardDescription>
+                    <CardDescription>Terminés aujourd&apos;hui</CardDescription>
                     <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
                         {stats.completed}
                     </CardTitle>
@@ -96,54 +96,54 @@ function QueueStats({ data }) {
                 </CardHeader>
             </Card>
         </div>
-    )
+    );
 }
 
-let delayId = 0
+let delayId = 0;
 
 export function QueueList({ salonId }) {
-    const { data: queueData, isLoading, error } = useFindQueue(salonId)
-    const isDesktop = useMediaQuery('(min-width: 768px)')
+    const { data: waitingQueueData, isLoading, error } = useFindWaitingQueueBySalonId(salonId);
+    const isDesktop = useMediaQuery("(min-width: 768px)");
 
     // État local pour la démo
     // const [serviceActive, setServiceActive] = useState(false)
     // Chaque bloc = { id, expiresAt: Date }
-    const [delayBlocks, setDelayBlocks] = useState([])
+    const [delayBlocks, setDelayBlocks] = useState([]);
 
     // Ajout d'un bloc de 10min
     const handleAddDelay = () => {
         setDelayBlocks(blocks => {
-            const now = new Date()
-            const last = blocks[blocks.length - 1]
-            const base = last ? new Date(last.expiresAt) : now
-            const expiresAt = new Date(base.getTime() + 10 * 60 * 1000)
-            delayId += 1
+            const now = new Date();
+            const last = blocks[blocks.length - 1];
+            const base = last ? new Date(last.expiresAt) : now;
+            const expiresAt = new Date(base.getTime() + 10 * 60 * 1000);
+            delayId += 1;
             return [
                 ...blocks,
                 { id: `delay-${delayId}-${Date.now()}`, expiresAt },
-            ]
-        })
-    }
+            ];
+        });
+    };
 
     // Suppression manuelle d'un bloc (toujours le dernier)
     const handleRemoveDelay = () => {
-        setDelayBlocks(blocks => blocks.slice(0, -1))
-    }
+        setDelayBlocks(blocks => blocks.slice(0, -1));
+    };
 
     // Suppression auto du premier bloc quand timer = 0
     useEffect(() => {
-        if (!delayBlocks.length) return
-        const now = new Date()
-        const msLeft = new Date(delayBlocks[0].expiresAt) - now
+        if (!delayBlocks.length) return;
+        const now = new Date();
+        const msLeft = new Date(delayBlocks[0].expiresAt) - now;
         if (msLeft <= 0) {
-            setDelayBlocks(blocks => blocks.slice(1))
-            return
+            setDelayBlocks(blocks => blocks.slice(1));
+            return;
         }
         const timeout = setTimeout(() => {
-            setDelayBlocks(blocks => blocks.slice(1))
-        }, msLeft)
-        return () => clearTimeout(timeout)
-    }, [delayBlocks])
+            setDelayBlocks(blocks => blocks.slice(1));
+        }, msLeft);
+        return () => clearTimeout(timeout);
+    }, [delayBlocks]);
 
     if (isLoading) {
         return (
@@ -159,7 +159,7 @@ export function QueueList({ salonId }) {
                     ))}
                 </div>
             </div>
-        )
+        );
     }
 
     if (error) {
@@ -171,16 +171,16 @@ export function QueueList({ salonId }) {
                     d&apos;attente.
                 </AlertDescription>
             </Alert>
-        )
+        );
     }
 
-    const waitingClients =
-        queueData?.filter(client => client.status === 'waiting') || []
-    const completedClients =
-        queueData?.filter(client => client.status === 'completed') || []
-    const currentClient = queueData?.find(
-        client => client.status === 'in_progress',
-    )
+    // const waitingClients =
+    //     queueData?.filter(client => client.status === "waiting") || [];
+    // const completedClients =
+    //     queueData?.filter(client => client.status === "completed") || [];
+    // const currentClient = queueData?.find(
+    //     client => client.status === "in_progress",
+    // );
 
     // Handlers mock
     // const handleStartService = () => setServiceActive(true)
@@ -212,7 +212,7 @@ export function QueueList({ salonId }) {
                     onClick={handleRemoveDelay}
                     className="flex items-center justify-center text-lg font-semibold gap-3 w-full sm:w-auto rounded-2xl shadow-md">
                     <Clock className="h-7 w-7" />
-                    Retirer 10 min d'attente
+                    Retirer 10 min d&apos;attente
                 </Button>
                 {/* <Button
                     variant="destructive"
@@ -226,10 +226,10 @@ export function QueueList({ salonId }) {
             {/* FIN BARRE D'ACTIONS */}
 
             {/* Stats en haut sur desktop uniquement */}
-            {isDesktop && <QueueStats data={queueData} />}
+            {/* {isDesktop && <QueueStats data={queueData} />} */}
 
             {/* CLIENT EN COURS + RETARD */}
-            {currentClient && (
+            {/* {currentClient && (
                 <div className="mb-6">
                     <h2 className="text-lg font-semibold mb-4">
                         Client en cours
@@ -238,9 +238,9 @@ export function QueueList({ salonId }) {
                         <QueueItem
                             client={currentClient}
                             isCurrentClient={true}
-                        />
+                        /> */}
                         {/* Affichage du retard en cours avec timer */}
-                        {delayBlocks.length > 0 && (
+                        {/* {delayBlocks.length > 0 && (
                             <div className="w-full flex flex-col gap-3 mt-4">
                                 {delayBlocks.map((block, i) => (
                                     <AnimatedDelayBlock
@@ -254,19 +254,19 @@ export function QueueList({ salonId }) {
                         )}
                     </div>
                 </div>
-            )}
+            )} */}
 
             <Tabs defaultValue="waiting" className="w-full">
                 <TabsList className="grid w-full grid-cols-2">
                     <TabsTrigger value="waiting">
-                        En attente ({waitingClients.length})
+                        En attente ({waitingQueueData?.clients?.length})
                     </TabsTrigger>
-                    <TabsTrigger value="completed">
+                    {/* <TabsTrigger value="completed">
                         Terminés ({completedClients.length})
-                    </TabsTrigger>
+                    </TabsTrigger> */}
                 </TabsList>
                 <TabsContent value="waiting" className="mt-4">
-                    {waitingClients.length === 0 ? (
+                    {waitingQueueData?.clients?.length === 0 ? (
                         <Alert>
                             <AlertDescription>
                                 Aucun client en attente pour le moment.
@@ -274,17 +274,17 @@ export function QueueList({ salonId }) {
                         </Alert>
                     ) : (
                         <div className="grid grid-cols-1 gap-4">
-                            {waitingClients.map(client => (
+                            {waitingQueueData?.clients?.map(client => (
                                 <QueueItem key={client.id} client={client} />
                             ))}
                         </div>
                     )}
                 </TabsContent>
-                <TabsContent value="completed" className="mt-4">
+                {/* <TabsContent value="completed" className="mt-4">
                     {completedClients.length === 0 ? (
                         <Alert>
                             <AlertDescription>
-                                Aucun client terminé aujourd'hui.
+                                Aucun client terminé aujourd&apos;hui.
                             </AlertDescription>
                         </Alert>
                     ) : (
@@ -294,57 +294,57 @@ export function QueueList({ salonId }) {
                             ))}
                         </div>
                     )}
-                </TabsContent>
+                </TabsContent> */}
             </Tabs>
 
             {/* Stats en bas sur mobile uniquement */}
-            {!isDesktop && <QueueStats data={queueData} />}
+            {/* {!isDesktop && <QueueStats data={queueData} />} */}
         </div>
-    )
+    );
 }
 
 function AnimatedDelayBlock({ expiresAt, showTimer, onRemove }) {
-    const [show, setShow] = useState(false)
-    const [timeLeft, setTimeLeft] = useState(0)
-    const ref = useRef(null)
+    const [show, setShow] = useState(false);
+    const [timeLeft, setTimeLeft] = useState(0);
+    const ref = useRef(null);
 
     // Animation d'apparition
     useEffect(() => {
-        setTimeout(() => setShow(true), 10)
-    }, [])
+        setTimeout(() => setShow(true), 10);
+    }, []);
 
     // Timer pour le premier bloc
     useEffect(() => {
-        if (!showTimer) return
+        if (!showTimer) return;
         const update = () => {
-            const now = new Date()
-            const ms = new Date(expiresAt) - now
-            setTimeLeft(Math.max(0, ms))
-        }
-        update()
-        const interval = setInterval(update, 250)
-        return () => clearInterval(interval)
-    }, [expiresAt, showTimer])
+            const now = new Date();
+            const ms = new Date(expiresAt) - now;
+            setTimeLeft(Math.max(0, ms));
+        };
+        update();
+        const interval = setInterval(update, 250);
+        return () => clearInterval(interval);
+    }, [expiresAt, showTimer]);
 
     // Format mm:ss
     const formatTime = ms => {
-        const totalSec = Math.ceil(ms / 1000)
-        const min = Math.floor(totalSec / 60)
-        const sec = totalSec % 60
-        return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`
-    }
+        const totalSec = Math.ceil(ms / 1000);
+        const min = Math.floor(totalSec / 60);
+        const sec = totalSec % 60;
+        return `${min.toString().padStart(2, "0")}:${sec.toString().padStart(2, "0")}`;
+    };
 
     return (
         <div
             ref={ref}
             className={`w-full bg-yellow-100 text-yellow-800 font-semibold rounded-xl py-3 text-base shadow border border-yellow-300 flex items-center transition-all duration-300 ease-out
-                ${show ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-75 -translate-y-10'}`}
-            style={{ willChange: 'opacity, transform' }}>
+                ${show ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-75 -translate-y-10"}`}
+            style={{ willChange: "opacity, transform" }}>
             <div className="flex-1 text-left select-none text-base font-bold">
                 +10 min
             </div>
             <div className="flex-1 text-center select-none text-2xl font-mono font-bold text-yellow-900">
-                {showTimer ? formatTime(timeLeft) : ''}
+                {showTimer ? formatTime(timeLeft) : ""}
             </div>
             <button
                 type="button"
@@ -354,5 +354,5 @@ function AnimatedDelayBlock({ expiresAt, showTimer, onRemove }) {
                 <X className="h-6 w-6" />
             </button>
         </div>
-    )
+    );
 }

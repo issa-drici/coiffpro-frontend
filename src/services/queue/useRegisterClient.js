@@ -1,22 +1,22 @@
-'use client'
+"use client";
 
-import { createQueueClient } from '@/utils/api-requests'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { createQueueClient } from "@/utils/api-requests";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useRegisterClient = ({ onSuccess } = {}) => {
-    const queryClient = useQueryClient()
+    const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: data => createQueueClient(data),
         onSuccess: async (...args) => {
             if (onSuccess) {
-                onSuccess(...args)
+                onSuccess(...args);
             }
-            await queryClient.invalidateQueries(['queue'])
-            return true
+            await queryClient.invalidateQueries(["queue"]);
+            return true;
         },
         onError: async () => {
-            return false
+            return false;
         },
-    })
-}
+    });
+};

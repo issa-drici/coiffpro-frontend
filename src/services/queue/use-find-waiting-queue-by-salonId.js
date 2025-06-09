@@ -1,12 +1,12 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { getQueue } from "@/utils/api-requests";
+import { getWaitingQueueBySalonId } from "@/utils/api-requests";
 
-export const useFindQueue = (salonId) => {
+export const useFindWaitingQueueBySalonId = (salonId) => {
     const { data, isLoading, isFetching, error } = useQuery({
-        queryKey: ["queue", salonId],
-        queryFn: () => getQueue(salonId),
+        queryKey: ["waiting-queue", salonId],
+        queryFn: () => getWaitingQueueBySalonId(salonId),
         refetchInterval: 30000, // Rafraîchir toutes les 30 secondes
         staleTime: 15000, // Considérer les données comme périmées après 15 secondes
         enabled: !!salonId,

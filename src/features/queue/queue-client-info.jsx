@@ -1,58 +1,54 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { format, format as formatDate } from 'date-fns'
-import { fr } from 'date-fns/locale'
-import { Timer, UserCheck, MapPin, Phone } from 'lucide-react'
-import { Skeleton } from '@/ui-components/skeleton'
-import { Alert, AlertDescription } from '@/ui-components/alert'
-import { AlertCircle } from 'lucide-react'
-import { useFindSalonInfo } from '@/services/salon/use-find-salon-info'
-import { useFindQueueClient } from '@/services/queue/use-find-queue-client'
+import { useEffect, useState } from "react";
+import { format, format as formatDate } from "date-fns";
+import { fr } from "date-fns/locale";
+import { Timer, UserCheck, MapPin, Phone } from "lucide-react";
+import { Skeleton } from "@/ui-components/skeleton";
+import { Alert, AlertDescription } from "@/ui-components/alert";
+import { AlertCircle } from "lucide-react";
+import { useFindSalonInfo } from "@/services/salon/use-find-salon-info";
+import { useFindQueueClient } from "@/services/queue/use-find-queue-client";
 
 function useCountdown(targetDate) {
-    const [timeLeft, setTimeLeft] = useState(null)
+    const [timeLeft, setTimeLeft] = useState(null);
 
     useEffect(() => {
         if (!targetDate) {
-            setTimeLeft(null)
-            return
+            setTimeLeft(null);
+            return;
         }
         const calculateTimeLeft = () => {
-            const now = new Date()
-            const target = new Date(targetDate)
-            const totalSeconds = Math.max(0, Math.floor((target - now) / 1000))
-            const hours = Math.floor(totalSeconds / 3600)
-            const minutes = Math.floor((totalSeconds % 3600) / 60)
-            const seconds = totalSeconds % 60
-            return { hours, minutes, seconds, totalSeconds }
-        }
-        setTimeLeft(calculateTimeLeft())
+            const now = new Date();
+            const target = new Date(targetDate);
+            const totalSeconds = Math.max(0, Math.floor((target - now) / 1000));
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+            return { hours, minutes, seconds, totalSeconds };
+        };
+        setTimeLeft(calculateTimeLeft());
         const timer = setInterval(() => {
-            const newTimeLeft = calculateTimeLeft()
-            setTimeLeft(newTimeLeft)
+            const newTimeLeft = calculateTimeLeft();
+            setTimeLeft(newTimeLeft);
             if (newTimeLeft.totalSeconds <= 0) {
-                clearInterval(timer)
+                clearInterval(timer);
             }
-        }, 1000)
-        return () => clearInterval(timer)
-    }, [targetDate])
-    return timeLeft
+        }, 1000);
+        return () => clearInterval(timer);
+    }, [targetDate]);
+    return timeLeft;
 }
 
-export function QueueClientInfo({ queueClientId }) {
+export function QueueClientInfo({ queueClientId, salonId }) {
     const {
         data: queueClient,
         isLoading,
         error,
-    } = useFindQueueClient(queueClientId)
-    const timeLeft = useCountdown(queueClient?.estimatedTime)
-    const { data: salonData } = useFindSalonInfo()
-    const salon = salonData?.data || {
-        name: 'Salon CoiffPro',
-        address: '123 rue de la Coiffure, 75001 Paris',
-        phone: '01 23 45 67 89',
-    }
+    } = useFindQueueClient(queueClientId);
+    const timeLeft = useCountdown(queueClient?.estimatedTime);
+    const { data: salonData } = useFindSalonInfo(salonId);
+    const salon = salonData?.data;
 
     if (isLoading) {
         return (
@@ -68,7 +64,7 @@ export function QueueClientInfo({ queueClientId }) {
                     <Skeleton className="h-24" />
                 </div>
             </div>
-        )
+        );
     }
 
     if (error) {
@@ -77,10 +73,10 @@ export function QueueClientInfo({ queueClientId }) {
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
                     Une erreur est survenue lors du chargement des informations
-                    de la file d'attente.
+                    de la file d&apos;attente.
                 </AlertDescription>
             </Alert>
-        )
+        );
     }
 
     if (!queueClient) {
@@ -88,26 +84,26 @@ export function QueueClientInfo({ queueClientId }) {
             <Alert>
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
-                    Client non trouvé dans la file d'attente.
+                    Client non trouvé dans la file d&apos;attente.
                 </AlertDescription>
             </Alert>
-        )
+        );
     }
 
     const formatTime = dateString => {
-        return format(new Date(dateString), 'HH:mm', { locale: fr })
-    }
+        return format(new Date(dateString), "HH:mm", { locale: fr });
+    };
 
     const formatDay = dateString => {
-        return formatDate(new Date(dateString), 'EEEE d MMMM yyyy', {
+        return formatDate(new Date(dateString), "EEEE d MMMM yyyy", {
             locale: fr,
-        })
-    }
+        });
+    };
 
     const formatTimeLeft = () => {
-        if (!timeLeft) return '--:--:--'
-        return `${timeLeft.hours.toString().padStart(2, '0')}:${timeLeft.minutes.toString().padStart(2, '0')}:${timeLeft.seconds.toString().padStart(2, '0')}`
-    }
+        if (!timeLeft) return "--:--:--";
+        return `${timeLeft.hours.toString().padStart(2, "0")}:${timeLeft.minutes.toString().padStart(2, "0")}:${timeLeft.seconds.toString().padStart(2, "0")}`;
+    };
 
     return (
         <div className="space-y-8">
@@ -118,7 +114,7 @@ export function QueueClientInfo({ queueClientId }) {
                         Ticket #
                         {queueClient?.ticket_number
                             ?.toString()
-                            .padStart(3, '0')}
+                            .padStart(8, "0")}
                     </span>
                 </div>
             </div>
@@ -128,19 +124,19 @@ export function QueueClientInfo({ queueClientId }) {
                 <div className="inline-flex flex-col items-center gap-4 bg-muted/50 rounded-lg p-8">
                     {/* Nom et prénom */}
                     <div className="text-lg font-semibold text-primary mb-2">
-                        {queueClient.firstName} {queueClient.lastName || ''}
+                        {queueClient.client.firstName} {queueClient.client.lastName || ""}
                     </div>
                     {/* Décompte */}
                     <div className="flex flex-col items-center gap-2">
                         <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
                             <Timer className="h-5 w-5" />
-                            Temps d'attente estimé
+                                Temps d&apos;attente estimé
                         </div>
                         <div className="text-4xl font-bold font-mono tabular-nums">
                             {formatTimeLeft()}
                         </div>
                         <div className="text-sm text-muted-foreground">
-                            Passage prévu à{' '}
+                            Passage prévu à{" "}
                             {queueClient?.estimatedTime &&
                                 formatTime(queueClient?.estimatedTime)}
                         </div>
@@ -148,7 +144,7 @@ export function QueueClientInfo({ queueClientId }) {
                     {/* Montant à payer */}
                     {queueClient?.amountToPay && (
                         <div className="mt-4 text-base font-medium text-green-700 bg-green-100 rounded px-3 py-1">
-                            Montant à régler :{' '}
+                            Montant à régler :{" "}
                             <span className="font-bold">
                                 {queueClient?.amountToPay} €
                             </span>
@@ -208,5 +204,5 @@ export function QueueClientInfo({ queueClientId }) {
                 </span>
             </div>
         </div>
-    )
+    );
 }

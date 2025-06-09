@@ -1,4 +1,4 @@
-import { QueueClientInfo } from '@/features/queue/queue-client-info'
+import { QueueClientInfo } from "@/features/queue/queue-client-info";
 
 export default function SalonRegistrationPage({ params }) {
     return (
@@ -9,20 +9,14 @@ export default function SalonRegistrationPage({ params }) {
                     <div className="md:flex md:items-center md:justify-between">
                         <div>
                             <h1 className="text-xl font-bold md:text-2xl">
-                                Votre ticket d'attente
+                                Votre ticket d&apos;attente
                             </h1>
                             <p className="hidden md:block mt-1 text-muted-foreground">
-                                Consultez votre position dans la file d'attente
-                                et le temps d'attente estimé.
+                                Consultez votre position dans la file d&apos;attente
+                                et le temps d&apos;attente estimé.
                             </p>
                         </div>
-                        <div className="hidden md:block">
-                            <div className="rounded-full bg-primary/10 px-4 py-2">
-                                <span className="text-sm font-medium text-primary">
-                                    Salon #{params.salonId}
-                                </span>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </header>
@@ -32,8 +26,8 @@ export default function SalonRegistrationPage({ params }) {
                 <div className="md:flex md:justify-center">
                     {/* Message d'introduction visible uniquement sur mobile */}
                     <p className="text-sm text-muted-foreground md:hidden mb-4">
-                        Consultez votre position dans la file d'attente et le
-                        temps d'attente estimé.
+                        Consultez votre position dans la file d&apos;attente et
+                        le temps d&apos;attente estimé.
                     </p>
 
                     {/* Carte du formulaire avec ombre adaptative */}
@@ -49,13 +43,13 @@ export default function SalonRegistrationPage({ params }) {
                             <div className="md:flex md:items-center md:justify-center md:gap-4">
                                 <p>
                                     En cas de problème, veuillez vous adresser à
-                                    l'accueil du salon.
+                                    l&apos;accueil du salon.
                                 </p>
                                 <div className="text-muted-foreground/50">
                                     •
                                 </div>
                                 <p>
-                                    Les temps d'attente sont donnés à titre
+                                    Les temps d&apos;attente sont donnés à titre
                                     indicatif
                                 </p>
                                 <div className="text-muted-foreground/50">
@@ -71,5 +65,5 @@ export default function SalonRegistrationPage({ params }) {
                 </div>
             </div>
         </main>
-    )
+    );
 }

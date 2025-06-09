@@ -1,15 +1,15 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
-import { useGetServices } from '@/services/services/useGetServices'
-import { useRegisterClient } from '@/services/queue/useRegisterClient'
-import { Button } from '@/ui-components/button'
-import { Input } from '@/ui-components/input'
-import { Checkbox } from '@/ui-components/checkbox'
-import { Alert, AlertDescription } from '@/ui-components/alert'
+import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { useGetServices } from "@/services/services/useGetServices";
+import { useRegisterClient } from "@/services/queue/useRegisterClient";
+import { Button } from "@/ui-components/button";
+import { Input } from "@/ui-components/input";
+import { Checkbox } from "@/ui-components/checkbox";
+import { Alert, AlertDescription } from "@/ui-components/alert";
 import {
     AlertCircle,
     Loader2,
@@ -19,10 +19,10 @@ import {
     Clock,
     Calendar,
     Euro,
-} from 'lucide-react'
-import { formatPrice } from '@/lib/utils'
-import { format } from 'date-fns'
-import { fr } from 'date-fns/locale'
+} from "lucide-react";
+import { formatPrice } from "@/lib/utils";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 import {
     Form,
     FormField,
@@ -31,78 +31,78 @@ import {
     FormControl,
     FormDescription,
     FormMessage,
-} from '@/ui-components/form'
-import { useGetEstimatedTime } from '@/services/queue/useGetEstimatedTime'
-import { useRouter } from 'next/navigation'
+} from "@/ui-components/form";
+import { useGetEstimatedTime } from "@/services/queue/useGetEstimatedTime";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
     firstName: z
         .string()
-        .min(2, 'Le prénom doit contenir au moins 2 caractères')
-        .max(50, 'Le prénom ne peut pas dépasser 50 caractères'),
+        .min(2, "Le prénom doit contenir au moins 2 caractères")
+        .max(50, "Le prénom ne peut pas dépasser 50 caractères"),
     lastName: z
         .string()
-        .min(2, 'Le nom doit contenir au moins 2 caractères')
-        .max(50, 'Le nom ne peut pas dépasser 50 caractères'),
+        .min(2, "Le nom doit contenir au moins 2 caractères")
+        .max(50, "Le nom ne peut pas dépasser 50 caractères"),
     email: z
         .string()
         .email("Format d'email invalide")
         .optional()
-        .or(z.literal('')),
+        .or(z.literal("")),
     phoneNumber: z
         .string()
-        .min(10, 'Le numéro de téléphone doit contenir 10 chiffres')
-        .max(10, 'Le numéro de téléphone doit contenir 10 chiffres')
+        .min(10, "Le numéro de téléphone doit contenir 10 chiffres")
+        .max(10, "Le numéro de téléphone doit contenir 10 chiffres")
         .regex(
             /^[0-9]+$/,
-            'Le numéro de téléphone ne doit contenir que des chiffres',
+            "Le numéro de téléphone ne doit contenir que des chiffres",
         ),
     services: z
         .array(z.string())
-        .min(1, 'Veuillez sélectionner au moins une prestation'),
-})
+        .min(1, "Veuillez sélectionner au moins une prestation"),
+});
 
 export function RegistrationForm({ salonId }) {
-    const router = useRouter()
-    const [isSuccess] = useState(false)
+    const router = useRouter();
+    const [isSuccess] = useState(false);
     const { data: services, isLoading: isLoadingServices } =
-        useGetServices(salonId)
+        useGetServices(salonId);
     const { mutateAsync: registerClient, isLoading: isSubmitting } =
         useRegisterClient({
-            handleCallbackSuccess: (queueClientId) => {
-                router.push(`/salon/${salonId}/queue/${queueClientId}`)
+            onSuccess: ({ data: queueClient }) => {
+                router.push(`/salon/${salonId}/queue/${queueClient?.id}`);
             },
-        })
-    const [selectedServicesState, setSelectedServicesState] = useState([])
-    const { data: estimatedTimeData } = useGetEstimatedTime(salonId)
+        });
+    const [selectedServicesState, setSelectedServicesState] = useState([]);
+    const { data: estimatedTimeData } = useGetEstimatedTime(salonId);
 
     const form = useForm({
         resolver: zodResolver(formSchema),
-        mode: 'onTouched',
+        mode: "onTouched",
         defaultValues: {
-            firstName: '',
-            lastName: '',
-            email: '',
-            phoneNumber: '',
+            firstName: "",
+            lastName: "",
+            email: "",
+            phoneNumber: "",
             services: [],
         },
-    })
+    });
 
     // Synchroniser le state local avec le champ du formulaire
     useEffect(() => {
-        form.setValue('services', selectedServicesState, {
+        form.setValue("services", selectedServicesState, {
             shouldValidate: true,
-        })
-    }, [selectedServicesState])
+        });
+    }, [selectedServicesState]);
 
     const totalPrice = selectedServicesState.reduce((total, serviceId) => {
-        const service = services?.data?.find(s => s.id === serviceId)
-        return total + (parseFloat(service?.price) || 0)
-    }, 0)
+        const service = services?.data?.find(s => s.id === serviceId);
+        return total + (parseFloat(service?.price) || 0);
+    }, 0);
 
     // Vérification si le formulaire est valide
     const isFormValid =
-        form.formState.isValid && selectedServicesState.length > 0
+        form.formState.isValid && selectedServicesState.length > 0;
 
     const onSubmit = async data => {
         try {
@@ -110,14 +110,14 @@ export function RegistrationForm({ salonId }) {
                 salonId,
                 ...data,
                 services: data.services,
-            })
+            });
         } catch (error) {
             // Les erreurs sont déjà gérées dans le hook (toast)
         }
-    }
+    };
 
     if (isSuccess) {
-        return null // On ne montre plus le message de succès, la redirection est automatique
+        return null; // On ne montre plus le message de succès, la redirection est automatique
     }
 
     return (
@@ -151,7 +151,7 @@ export function RegistrationForm({ salonId }) {
                                             <FormItem>
                                                 <FormLabel className="flex items-center gap-2 text-base">
                                                     <User className="h-4 w-4 md:h-5 md:w-5" />
-                                                    Prénom{' '}
+                                                    Prénom{" "}
                                                     <span className="text-destructive">
                                                         *
                                                     </span>
@@ -173,7 +173,7 @@ export function RegistrationForm({ salonId }) {
                                             <FormItem>
                                                 <FormLabel className="flex items-center gap-2 text-base">
                                                     <User className="h-4 w-4 md:h-5 md:w-5" />
-                                                    Nom{' '}
+                                                    Nom{" "}
                                                     <span className="text-destructive">
                                                         *
                                                     </span>
@@ -195,7 +195,7 @@ export function RegistrationForm({ salonId }) {
                                             <FormItem>
                                                 <FormLabel className="flex items-center gap-2 text-base">
                                                     <Phone className="h-4 w-4 md:h-5 md:w-5" />
-                                                    Numéro de téléphone{' '}
+                                                    Numéro de téléphone{" "}
                                                     <span className="text-destructive">
                                                         *
                                                     </span>
@@ -281,7 +281,7 @@ export function RegistrationForm({ salonId }) {
                                                         const isChecked =
                                                             selectedServicesState.includes(
                                                                 service.id,
-                                                            )
+                                                            );
                                                         return (
                                                             <FormItem
                                                                 key={service.id}
@@ -292,7 +292,7 @@ export function RegistrationForm({ salonId }) {
                                                                             'input[type="checkbox"]',
                                                                         )
                                                                     )
-                                                                        return
+                                                                        return;
                                                                     setSelectedServicesState(
                                                                         current =>
                                                                             isChecked
@@ -305,7 +305,7 @@ export function RegistrationForm({ salonId }) {
                                                                                       ...current,
                                                                                       service.id,
                                                                                   ],
-                                                                    )
+                                                                    );
                                                                 }}>
                                                                 <FormControl>
                                                                     <Checkbox
@@ -329,7 +329,7 @@ export function RegistrationForm({ salonId }) {
                                                                                                   val !==
                                                                                                   service.id,
                                                                                           ),
-                                                                            )
+                                                                            );
                                                                         }}
                                                                     />
                                                                 </FormControl>
@@ -344,7 +344,7 @@ export function RegistrationForm({ salonId }) {
                                                                     <p className="text-sm text-muted-foreground">
                                                                         {
                                                                             service.duration
-                                                                        }{' '}
+                                                                        }{" "}
                                                                         min
                                                                     </p>
                                                                 </div>
@@ -354,7 +354,7 @@ export function RegistrationForm({ salonId }) {
                                                                     )}
                                                                 </span>
                                                             </FormItem>
-                                                        )
+                                                        );
                                                     },
                                                 )}
                                                 {(form.formState.touchedFields
@@ -392,7 +392,7 @@ export function RegistrationForm({ salonId }) {
                                                             s => s.id === id,
                                                         )?.duration || 0),
                                                     0,
-                                                )}{' '}
+                                                )}{" "}
                                                 minutes
                                             </span>
                                         </div>
@@ -400,7 +400,7 @@ export function RegistrationForm({ salonId }) {
                                             <div className="flex items-center gap-2 text-muted-foreground">
                                                 <Calendar className="h-4 w-4" />
                                                 <span>
-                                                    Temps d'attente estimé
+                                                    Temps d&apos;attente estimé
                                                 </span>
                                             </div>
                                             <span className="font-medium">
@@ -410,12 +410,12 @@ export function RegistrationForm({ salonId }) {
                                                           new Date(
                                                               estimatedTimeData.data.estimatedTime,
                                                           ),
-                                                          'HH:mm',
+                                                          "HH:mm",
                                                           {
                                                               locale: fr,
                                                           },
                                                       )
-                                                    : 'Calcul en cours...'}
+                                                    : "Calcul en cours..."}
                                             </span>
                                         </div>
                                         <div className="flex items-center justify-between pt-2 border-t">
@@ -455,7 +455,7 @@ export function RegistrationForm({ salonId }) {
                                     Inscription en cours...
                                 </>
                             ) : (
-                                "S'inscrire à la file d'attente"
+                                "S&apos;inscrire à la file d&apos;attente"
                             )}
                         </Button>
                     </div>
@@ -472,5 +472,5 @@ export function RegistrationForm({ salonId }) {
                 </form>
             </div>
         </Form>
-    )
+    );
 }

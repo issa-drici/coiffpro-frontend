@@ -1,12 +1,21 @@
-import axios from '@/lib/axios'
+import axios from "@/lib/axios";
 
 /**
  * Récupère la liste des clients en file d'attente
  * @returns {Promise<{data: Array<QueueClient>}>}
  */
 export async function getQueue(salonId) {
-    const response = await axios.get(`/api/queue/${salonId}`)
-    return response.data
+    const response = await axios.get(`/api/queue/${salonId}`);
+    return response.data;
+}
+
+/**
+ * Récupère la liste des clients en file d'attente
+ * @returns {Promise<{data: Array<QueueClient>}>}
+ */
+export async function getWaitingQueueBySalonId(salonId) {
+    const response = await axios.get(`/api/queue/waiting/${salonId}`);
+    return response.data;
 }
 
 /**
@@ -15,8 +24,8 @@ export async function getQueue(salonId) {
  * @returns {Promise<{data: QueueClient}>}
  */
 export async function takeClient(clientId) {
-    const response = await axios.post(`/api/queue/${clientId}/take`)
-    return response.data
+    const response = await axios.post(`/api/queue/${clientId}/take`);
+    return response.data;
 }
 
 /**
@@ -25,17 +34,17 @@ export async function takeClient(clientId) {
  * @returns {Promise<{data: QueueClient}>}
  */
 export async function markClientAbsent(clientId) {
-    const response = await axios.post(`/api/queue/${clientId}/absent`)
-    return response.data
+    const response = await axios.post(`/api/queue/${clientId}/absent`);
+    return response.data;
 }
 
 /**
  * Récupère les informations du salon
  * @returns {Promise<{data: SalonInfo}>}
  */
-export async function getSalonInfo() {
-    const response = await axios.get('/api/salon/info')
-    return response.data
+export async function getSalonInfo(salonId) {
+    const response = await axios.get(`/api/salon/${salonId}`);
+    return response.data;
 }
 
 /**
@@ -43,8 +52,8 @@ export async function getSalonInfo() {
  * @returns {Promise<{data: UserInfo}>}
  */
 export async function getUserInfo() {
-    const response = await axios.get('/api/user/info')
-    return response.data
+    const response = await axios.get("/api/user/info");
+    return response.data;
 }
 
 /**
@@ -52,8 +61,8 @@ export async function getUserInfo() {
  * @returns {Promise<{data: Array<NavItem>}>}
  */
 export async function getNavigationItems() {
-    const response = await axios.get('/api/user/navigation')
-    return response.data
+    const response = await axios.get("/api/user/navigation");
+    return response.data;
 }
 
 /**
@@ -61,8 +70,8 @@ export async function getNavigationItems() {
  * @returns {Promise<{data: Array<FAQItem>}>}
  */
 export async function getFAQ() {
-    const response = await axios.get('/api/faq')
-    return response.data
+    const response = await axios.get("/api/faq");
+    return response.data;
 }
 
 /**
@@ -73,10 +82,10 @@ export async function getFAQ() {
  * @returns {Promise<{data: Array<VisitorStats>}>}
  */
 export async function getVisitorStats({ startDate, endDate }) {
-    const response = await axios.get('/api/stats/visitors', {
+    const response = await axios.get("/api/stats/visitors", {
         params: { startDate, endDate },
-    })
-    return response.data
+    });
+    return response.data;
 }
 
 /**
@@ -84,8 +93,8 @@ export async function getVisitorStats({ startDate, endDate }) {
  * @returns {Promise<{data: Array<Service>}>}
  */
 export async function getAllServices() {
-    const response = await axios.get('/api/services')
-    return response.data
+    const response = await axios.get("/api/services");
+    return response.data;
 }
 
 /**
@@ -97,8 +106,8 @@ export async function getAllServices() {
  * @returns {Promise<{data: Service}>}
  */
 export async function createService(data) {
-    const response = await axios.post('/api/services', data)
-    return response.data
+    const response = await axios.post("/api/services", data);
+    return response.data;
 }
 
 /**
@@ -111,9 +120,9 @@ export async function createService(data) {
  * @returns {Promise<{data: Service}>}
  */
 export async function updateService(data) {
-    const { id, ...serviceData } = data
-    const response = await axios.put(`/api/services/${id}`, serviceData)
-    return response.data
+    const { id, ...serviceData } = data;
+    const response = await axios.put(`/api/services/${id}`, serviceData);
+    return response.data;
 }
 
 /**
@@ -122,8 +131,8 @@ export async function updateService(data) {
  * @returns {Promise<{data: null}>}
  */
 export async function deleteService(id) {
-    const response = await axios.delete(`/api/services/${id}`)
-    return response.data
+    const response = await axios.delete(`/api/services/${id}`);
+    return response.data;
 }
 
 /**
@@ -133,12 +142,12 @@ export async function deleteService(id) {
  * @returns {Promise<{data: QueueClient}>}
  */
 export async function createQueueClient(data) {
-    const { salonId, ...clientData } = data
+    const { salonId, ...clientData } = data;
     const response = await axios.post(
         `/api/salons/${salonId}/queue`,
         clientData,
-    )
-    return response.data
+    );
+    return response.data;
 }
 
 /**
@@ -152,9 +161,9 @@ export async function createQueueClient(data) {
  * @returns {Promise<{data: QueueClient}>}
  */
 export async function updateQueueClient(data) {
-    const { id, ...clientData } = data
-    const response = await axios.put(`/api/queue/${id}`, clientData)
-    return response.data
+    const { id, ...clientData } = data;
+    const response = await axios.put(`/api/queue/${id}`, clientData);
+    return response.data;
 }
 
 /**
@@ -163,8 +172,8 @@ export async function updateQueueClient(data) {
  * @returns {Promise<{data: null}>}
  */
 export async function deleteQueueClient(clientId) {
-    const response = await axios.delete(`/api/queue/${clientId}`)
-    return response.data
+    const response = await axios.delete(`/api/queue/${clientId}`);
+    return response.data;
 }
 
 /**
@@ -173,8 +182,8 @@ export async function deleteQueueClient(clientId) {
  * @returns {Promise<{data: Array<Service>}>}
  */
 export async function getSalonServices(salonId) {
-    const response = await axios.get(`/api/salons/${salonId}/services`)
-    return response.data
+    const response = await axios.get(`/api/salons/${salonId}/services`);
+    return response.data;
 }
 
 /**
@@ -183,8 +192,8 @@ export async function getSalonServices(salonId) {
  * @returns {Promise<{data: {estimatedTime: string}}>}
  */
 export async function getEstimatedTime(salonId) {
-    const response = await axios.get(`/api/salons/${salonId}/estimated-time`)
-    return response.data
+    const response = await axios.get(`/api/salons/${salonId}/estimated-time`);
+    return response.data;
 }
 
 /**
@@ -193,6 +202,6 @@ export async function getEstimatedTime(salonId) {
  * @returns {Promise<{data: QueueClient}>}
  */
 export async function getQueueClient(queueClientId) {
-    const response = await axios.get(`/api/queue/${queueClientId}`)
-    return response.data
+    const response = await axios.get(`/api/queue-client/${queueClientId}`);
+    return response.data;
 }
