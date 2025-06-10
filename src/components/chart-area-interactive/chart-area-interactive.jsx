@@ -81,10 +81,19 @@ export function ChartAreaInteractive() {
                 <CardTitle>Total des Visiteurs</CardTitle>
                 <CardDescription>
                     <span className="hidden @[540px]/card:block">
-                        Total des {timeRange === '90d' ? '3 derniers mois' : timeRange === '30d' ? '30 derniers jours' : '7 derniers jours'}
+                        Total des{' '}
+                        {timeRange === '90d'
+                            ? '3 derniers mois'
+                            : timeRange === '30d'
+                              ? '30 derniers jours'
+                              : '7 derniers jours'}
                     </span>
                     <span className="@[540px]/card:hidden">
-                        {timeRange === '90d' ? '3 derniers mois' : timeRange === '30d' ? '30 derniers jours' : '7 derniers jours'}
+                        {timeRange === '90d'
+                            ? '3 derniers mois'
+                            : timeRange === '30d'
+                              ? '30 derniers jours'
+                              : '7 derniers jours'}
                     </span>
                 </CardDescription>
                 <CardAction>

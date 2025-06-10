@@ -1,5 +1,12 @@
 import { Button } from '@/ui-components/button'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/ui-components/card'
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from '@/ui-components/card'
 
 export const Pricing = () => {
     return (
@@ -9,8 +16,8 @@ export const Pricing = () => {
                     Tarifs simples, sans surprise
                 </h2>
                 <p className="text-gray-600 mt-4 max-w-xl mx-auto text-base">
-                    Pas d'engagement. Pas de frais cachés. Vous testez, vous
-                    décidez.
+                    Pas d&apos;engagement. Pas de frais cachés. Vous testez,
+                    vous décidez.
                 </p>
             </div>
             <div className="w-full max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
@@ -70,7 +77,7 @@ export const Pricing = () => {
                                 <span className="text-green-500 text-lg">
                                     ✔
                                 </span>
-                                File d'attente illimitée
+                                File d&apos;attente illimitée
                             </li>
                             <li className="flex items-center gap-2">
                                 <span className="text-green-500 text-lg">

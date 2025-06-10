@@ -20,7 +20,7 @@ export const CTA = () => {
                                     ✓
                                 </span>
                                 <span className="text-gray-700">
-                                    7 jours d'essai gratuit
+                                    7 jours d&apos;essai gratuit
                                 </span>
                             </div>
                             <div className="flex items-center gap-2">
@@ -42,7 +42,7 @@ export const CTA = () => {
                         </div>
                         <div className="flex flex-col items-start gap-4 mt-auto">
                             <Button className="w-full md:w-auto">
-                                Commencer l'essai gratuit →
+                                Commencer l&apos;essai gratuit →
                             </Button>
                             <p className="text-sm text-gray-500">
                                 Déjà plus de 500 coiffeurs nous font confiance

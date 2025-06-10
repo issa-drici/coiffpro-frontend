@@ -1,4 +1,10 @@
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/ui-components/card'
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/ui-components/card'
 
 export const HowItWorks = () => {
     return (
@@ -12,11 +18,11 @@ export const HowItWorks = () => {
                 <Card className="min-h-[320px]">
                     <CardHeader className="mb-4">
                         <CardTitle className="text-xl text-gray-800 text-left">
-                            1. Ouvrez la file d'attente
+                            1. Ouvrez la file d&apos;attente
                         </CardTitle>
                         <CardDescription className="mb-0 text-gray-600 text-sm">
-                            En un clic, vous lancez la file sur votre
-                            téléphone ou tablette.
+                            En un clic, vous lancez la file sur votre téléphone
+                            ou tablette.
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="flex-1 flex items-end p-0">
@@ -28,11 +34,11 @@ export const HowItWorks = () => {
                 <Card className="min-h-[320px]">
                     <CardHeader className="mb-4">
                         <CardTitle className="text-xl text-gray-800 text-left">
-                            2. Vos clients s'inscrivent
+                            2. Vos clients s&apos;inscrivent
                         </CardTitle>
                         <CardDescription className="mb-0 text-gray-600 text-sm">
-                            Ils réservent leur tour, sur place ou à
-                            distance, sans créer de compte.
+                            Ils réservent leur tour, sur place ou à distance,
+                            sans créer de compte.
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="flex-1 flex items-end p-0">
@@ -47,8 +53,8 @@ export const HowItWorks = () => {
                             3. Vous appelez le suivant
                         </CardTitle>
                         <CardDescription className="mb-0 text-gray-600 text-sm">
-                            Un clic, le client est prévenu, la file avance.
-                            Vous restez maître du rythme.
+                            Un clic, le client est prévenu, la file avance. Vous
+                            restez maître du rythme.
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="flex-1 flex items-end p-0">

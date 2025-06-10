@@ -85,7 +85,11 @@ import {
     TableRow,
 } from '@/ui-components/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/ui-components/tabs'
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/ui-components/chart'
+import {
+    ChartContainer,
+    ChartTooltip,
+    ChartTooltipContent,
+} from '@/ui-components/chart'
 
 export const schema = z.object({
     id: z.number(),

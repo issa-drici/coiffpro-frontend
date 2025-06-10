@@ -1,12 +1,12 @@
-import Image from 'next/image'
+import { SectionTitle } from '@/components/section-title'
 import {
     Card,
+    CardContent,
+    CardDescription,
     CardHeader,
     CardTitle,
-    CardDescription,
-    CardContent,
 } from '@/ui-components/card'
-import { SectionTitle } from '@/components/section-title'
+import Image from 'next/image'
 
 export const Features = () => {
     return (
@@ -21,8 +21,8 @@ export const Features = () => {
                                 🕒 Zéro rendez-vous, zéro contrainte
                             </CardTitle>
                             <CardDescription className="mb-0 text-gray-600">
-                                Continuez à travailler comme d'habitude, sans
-                                planning ni prise de tête.
+                                Continuez à travailler comme d&apos;habitude,
+                                sans planning ni prise de tête.
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="flex-1 flex items-end p-0">
@@ -40,8 +40,8 @@ export const Features = () => {
                     <Card className="pb-0 overflow-hidden">
                         <CardHeader className="mb-3">
                             <CardTitle className="text-lg text-gray-800">
-                                🕵️‍♂️ File d'attente invisible pour
-                                l'administration
+                                🕵️‍♂️ File d&apos;attente invisible pour
+                                l&apos;administration
                             </CardTitle>
                             <CardDescription className="mb-0 text-gray-600">
                                 Personne ne voit combien de clients passent,
@@ -137,7 +137,7 @@ export const Features = () => {
                         -30 min
                     </div>
                     <div className="text-xs text-gray-500 text-center">
-                        d'attente en moins par client
+                        d&apos;attente en moins par client
                     </div>
                 </div>
                 <div className="flex flex-col items-center">
@@ -149,13 +149,13 @@ export const Features = () => {
                 <div className="flex flex-col items-center">
                     <div className="text-2xl font-bold text-gray-900">0</div>
                     <div className="text-xs text-gray-500 text-center">
-                        statistique ou chiffre d'affaires affiché
+                        statistique ou chiffre d&apos;affaires affiché
                     </div>
                 </div>
                 <div className="flex flex-col items-center">
                     <div className="text-2xl font-bold text-gray-900">100%</div>
                     <div className="text-xs text-gray-500 text-center">
-                        de contrôle sur votre file d'attente
+                        de contrôle sur votre file d&apos;attente
                     </div>
                 </div>
             </div>

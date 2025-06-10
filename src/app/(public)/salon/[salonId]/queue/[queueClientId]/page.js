@@ -1,4 +1,4 @@
-import { QueueClientInfo } from "@/features/queue/queue-client-info";
+import { QueueClientInfo } from '@/features/queue/queue-client-info'
 
 export default function SalonRegistrationPage({ params }) {
     return (
@@ -12,11 +12,11 @@ export default function SalonRegistrationPage({ params }) {
                                 Votre ticket d&apos;attente
                             </h1>
                             <p className="hidden md:block mt-1 text-muted-foreground">
-                                Consultez votre position dans la file d&apos;attente
-                                et le temps d&apos;attente estimé.
+                                Consultez votre position dans la file
+                                d&apos;attente et le temps d&apos;attente
+                                estimé.
                             </p>
                         </div>
-
                     </div>
                 </div>
             </header>
@@ -65,5 +65,5 @@ export default function SalonRegistrationPage({ params }) {
                 </div>
             </div>
         </main>
-    );
+    )
 }

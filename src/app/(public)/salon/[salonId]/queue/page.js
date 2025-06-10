@@ -1,4 +1,4 @@
-import { RegistrationForm } from "@/features/registration-queue/registration-form";
+import { RegistrationForm } from '@/features/registration-queue/registration-form'
 
 export default function SalonRegistrationPage({ params }) {
     return (
@@ -12,8 +12,8 @@ export default function SalonRegistrationPage({ params }) {
                                 Inscription à la file d&apos;attente
                             </h1>
                             <p className="hidden md:block mt-1 text-muted-foreground">
-                                Remplissez le formulaire ci-dessous pour vous inscrire à la
-                                file d&apos;attente.
+                                Remplissez le formulaire ci-dessous pour vous
+                                inscrire à la file d&apos;attente.
                             </p>
                         </div>
                         <div className="hidden md:block">
@@ -32,8 +32,8 @@ export default function SalonRegistrationPage({ params }) {
                 <div className="md:flex md:justify-center">
                     {/* Message d'introduction visible uniquement sur mobile */}
                     <p className="text-sm text-muted-foreground md:hidden mb-4">
-                        Remplissez le formulaire ci-dessous pour vous inscrire à la
-                        file d&apos;attente.
+                        Remplissez le formulaire ci-dessous pour vous inscrire à
+                        la file d&apos;attente.
                     </p>
 
                     {/* Carte du formulaire avec ombre adaptative */}
@@ -46,10 +46,12 @@ export default function SalonRegistrationPage({ params }) {
                         <footer className="mt-8 text-center text-sm text-muted-foreground md:mt-12">
                             <div className="md:flex md:items-center md:justify-center md:gap-4">
                                 <p>
-                                    En cas de problème, veuillez vous adresser à l&apos;accueil du
-                                    salon.
+                                    En cas de problème, veuillez vous adresser à
+                                    l&apos;accueil du salon.
                                 </p>
-                                <div className="hidden md:block text-muted-foreground/50">•</div>
+                                <div className="hidden md:block text-muted-foreground/50">
+                                    •
+                                </div>
                                 <p className="hidden md:block">
                                     Temps d&apos;attente estimé : 15-30 minutes
                                 </p>
@@ -59,5 +61,5 @@ export default function SalonRegistrationPage({ params }) {
                 </div>
             </div>
         </main>
-    );
+    )
 }

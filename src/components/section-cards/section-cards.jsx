@@ -55,7 +55,7 @@ export function SectionCards() {
                         <IconTrendingDown className="size-4" />
                     </div>
                     <div className="text-muted-foreground">
-                        L'acquisition nécessite de l'attention
+                        L&apos;acquisition nécessite de l&apos;attention
                     </div>
                 </CardFooter>
             </Card>
@@ -78,7 +78,7 @@ export function SectionCards() {
                         <IconTrendingUp className="size-4" />
                     </div>
                     <div className="text-muted-foreground">
-                        L'engagement dépasse les objectifs
+                        L&apos;engagement dépasse les objectifs
                     </div>
                 </CardFooter>
             </Card>

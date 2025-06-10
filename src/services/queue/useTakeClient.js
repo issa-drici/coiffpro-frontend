@@ -8,7 +8,7 @@ export const useTakeClient = ({ onSuccess } = {}) => {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: (clientId) => takeClient(clientId),
+        mutationFn: clientId => takeClient(clientId),
         onSuccess: async (...args) => {
             if (onSuccess) {
                 onSuccess(...args)

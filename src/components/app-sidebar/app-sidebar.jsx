@@ -6,11 +6,11 @@ import {
     IconHelp,
     IconListDetails,
     IconRazorElectric,
-} from "@tabler/icons-react";
+} from '@tabler/icons-react'
 
-import { NavMain } from "@/components/nav-main";
-import { NavSecondary } from "@/components/nav-secondary";
-import { NavUser } from "@/components/nav-user";
+import { NavMain } from '@/components/nav-main'
+import { NavSecondary } from '@/components/nav-secondary'
+import { NavUser } from '@/components/nav-user'
 import {
     Sidebar,
     SidebarContent,
@@ -19,15 +19,15 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
-} from "@/ui-components/sidebar";
-import { useAuth } from "@/hooks/auth";
-import Link from "next/link";
+} from '@/ui-components/sidebar'
+import { useAuth } from '@/hooks/auth'
+import Link from 'next/link'
 
 const data = {
     user: {
-        name: "shadcn",
-        email: "m@example.com",
-        avatar: "/avatars/shadcn.jpg",
+        name: 'shadcn',
+        email: 'm@example.com',
+        avatar: '/avatars/shadcn.jpg',
     },
     navMain: [
         // {
@@ -36,13 +36,13 @@ const data = {
         //     icon: IconDashboard,
         // },
         {
-            title: "Prestations",
-            url: "/admin/services",
+            title: 'Prestations',
+            url: '/admin/services',
             icon: IconListDetails,
         },
         {
             title: "Liste d'attente",
-            url: "/admin/queue",
+            url: '/admin/queue',
             icon: IconChartBar,
         },
         // {
@@ -59,48 +59,48 @@ const data = {
     ],
     navClouds: [
         {
-            title: "Capture",
+            title: 'Capture',
             icon: IconCamera,
             isActive: true,
-            url: "#",
+            url: '#',
             items: [
                 {
-                    title: "Active Proposals",
-                    url: "#",
+                    title: 'Active Proposals',
+                    url: '#',
                 },
                 {
-                    title: "Archived",
-                    url: "#",
+                    title: 'Archived',
+                    url: '#',
                 },
             ],
         },
         {
-            title: "Proposal",
+            title: 'Proposal',
             icon: IconFileDescription,
-            url: "#",
+            url: '#',
             items: [
                 {
-                    title: "Active Proposals",
-                    url: "#",
+                    title: 'Active Proposals',
+                    url: '#',
                 },
                 {
-                    title: "Archived",
-                    url: "#",
+                    title: 'Archived',
+                    url: '#',
                 },
             ],
         },
         {
-            title: "Prompts",
+            title: 'Prompts',
             icon: IconFileAi,
-            url: "#",
+            url: '#',
             items: [
                 {
-                    title: "Active Proposals",
-                    url: "#",
+                    title: 'Active Proposals',
+                    url: '#',
                 },
                 {
-                    title: "Archived",
-                    url: "#",
+                    title: 'Archived',
+                    url: '#',
                 },
             ],
         },
@@ -112,8 +112,8 @@ const data = {
         //     icon: IconSettings,
         // },
         {
-            title: "Assistance",
-            url: "#",
+            title: 'Assistance',
+            url: '#',
             icon: IconHelp,
         },
         // {
@@ -139,10 +139,10 @@ const data = {
     //         icon: IconFileWord,
     //     },
     // ],
-};
+}
 
 export function AppSidebar({ ...props }) {
-    const { user } = useAuth({ middleware: "auth" });
+    const { user } = useAuth({ middleware: 'auth' })
 
     return (
         <Sidebar collapsible="icon" {...props}>
@@ -173,5 +173,5 @@ export function AppSidebar({ ...props }) {
                 <NavUser user={user} />
             </SidebarFooter>
         </Sidebar>
-    );
+    )
 }

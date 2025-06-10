@@ -7,14 +7,15 @@ export const useUpdateService = ({ salonId, onSuccess } = {}) => {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: ({ serviceId, updates }) => updateService({ id: serviceId, ...updates }),
+        mutationFn: ({ serviceId, updates }) =>
+            updateService({ id: serviceId, ...updates }),
         onSuccess: async (...args) => {
             if (onSuccess) {
                 onSuccess(...args)
             }
             await queryClient.invalidateQueries({
                 queryKey: ['salon', salonId, 'services'],
-                exact: true
+                exact: true,
             })
         },
     })

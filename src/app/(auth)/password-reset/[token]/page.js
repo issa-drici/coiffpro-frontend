@@ -1,13 +1,13 @@
 'use client'
 
+import AuthSessionStatus from '@/app/(auth)/AuthSessionStatus'
 import { InputError } from '@/components/input-error'
 import { Label } from '@/components/label'
 import { useAuth } from '@/hooks/auth'
-import { useEffect, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
-import AuthSessionStatus from '@/app/(auth)/AuthSessionStatus'
 import { Button } from '@/ui-components/button'
 import { Input } from '@/ui-components/input'
+import { useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 const PasswordReset = () => {
     const searchParams = useSearchParams()
@@ -34,6 +34,7 @@ const PasswordReset = () => {
 
     useEffect(() => {
         setEmail(searchParams.get('email'))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchParams.get('email')])
 
     return (

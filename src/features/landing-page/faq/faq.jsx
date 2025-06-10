@@ -34,7 +34,7 @@ export const FAQ = () => {
                 <Card className="col-span-1 md:col-span-2 border-0 shadow-none bg-transparent">
                     <CardContent className="p-0">
                         <Accordion type="single" collapsible className="w-full">
-                            {faqData.map((faq) => (
+                            {faqData.map(faq => (
                                 <AccordionItem
                                     key={faq.id}
                                     value={`faq-${faq.id}`}

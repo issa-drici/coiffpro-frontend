@@ -1,5 +1,5 @@
 ---
-name: "Bug report"
+name: 'Bug report'
 about: "Report something that's broken. Please ensure your Laravel version is still supported: https://laravel.com/docs/releases#support-policy"
 ---
 
@@ -14,7 +14,6 @@ about: "Report something that's broken. Please ensure your Laravel version is st
 - Node Version: #.#.#
 
 ### Description:
-
 
 ### Steps To Reproduce:
 

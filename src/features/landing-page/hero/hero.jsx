@@ -1,6 +1,6 @@
 import { Button } from '@/ui-components/button'
-import Link from 'next/link'
 import Image from 'next/image'
+import Link from 'next/link'
 
 export const Hero = () => {
     return (
@@ -19,7 +19,7 @@ export const Hero = () => {
             </div>
             {/* Titre principal */}
             <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-gray-900 text-center leading-tight">
-                Moins d'attente, plus de clients heureux.
+                Moins d&apos;attente, plus de clients heureux.
                 <br />
                 Sans changer tes habitudes.
             </h1>

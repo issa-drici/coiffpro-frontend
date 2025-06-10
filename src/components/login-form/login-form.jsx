@@ -1,12 +1,12 @@
 'use client'
 
+import { useAuth } from '@/hooks/auth'
 import { cn } from '@/lib/utils'
+import { Button } from '@/ui-components/button'
 import { Input } from '@/ui-components/input'
 import { Label } from '@/ui-components/label'
-import { useAuth } from '@/hooks/auth'
-import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Button } from '@/ui-components/button'
+import { useEffect, useState } from 'react'
 
 export function LoginForm({ className, ...props }) {
     const router = useRouter()
@@ -29,7 +29,8 @@ export function LoginForm({ className, ...props }) {
         } else {
             setStatus(null)
         }
-    })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const submitForm = async event => {
         event.preventDefault()
@@ -47,7 +48,7 @@ export function LoginForm({ className, ...props }) {
         } catch (error) {
             if (error?.response?.data?.errors) {
                 // Erreur Axios avec des erreurs de validation
-            setErrors(error.response.data.errors)
+                setErrors(error.response.data.errors)
             } else if (error?.response?.data?.message) {
                 // Erreur Axios avec un message d'erreur
                 setErrors({ general: error.response.data.message })
@@ -56,7 +57,9 @@ export function LoginForm({ className, ...props }) {
                 setErrors({ general: error.message })
             } else {
                 // Erreur inconnue
-                setErrors({ general: "Une erreur inattendue s'est produite" })
+                setErrors({
+                    general: "Une erreur inattendue s'est produite",
+                })
             }
         } finally {
             setIsLoading(false)

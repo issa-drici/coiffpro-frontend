@@ -32,7 +32,9 @@ export function NavDocuments({ items }) {
             <SidebarGroupLabel>Documents</SidebarGroupLabel>
             <SidebarMenu>
                 {items.map(item => (
-                    <SidebarMenuItem className="flex items-center gap-1" key={item.name}>
+                    <SidebarMenuItem
+                        className="flex items-center gap-1"
+                        key={item.name}>
                         <SidebarMenuButton asChild>
                             <a href={item.url}>
                                 <item.icon />
@@ -41,8 +43,7 @@ export function NavDocuments({ items }) {
                         </SidebarMenuButton>
                         <DropdownMenu>
                             <DropdownMenuTrigger>
-                                <SidebarMenuAction
-                                    className="data-[state=open]:bg-accent rounded-sm">
+                                <SidebarMenuAction className="data-[state=open]:bg-accent rounded-sm">
                                     <IconDots />
                                     <span className="sr-only">More</span>
                                 </SidebarMenuAction>

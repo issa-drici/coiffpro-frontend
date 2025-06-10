@@ -1,6 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { ResponsiveDialog } from '@/components/responsive-dialog'
+import { useDeleteService } from '@/services/services/use-delete-service'
+import { useGetServices } from '@/services/services/useGetServices'
+import { Button } from '@/ui-components/button'
+import { Skeleton } from '@/ui-components/skeleton'
 import {
     Table,
     TableBody,
@@ -9,14 +13,10 @@ import {
     TableHeader,
     TableRow,
 } from '@/ui-components/table'
-import { Button } from '@/ui-components/button'
-import { Edit, Trash2 } from 'lucide-react'
-import { useDeleteService } from '@/services/services/use-delete-service'
 import { formatPrice } from '@/utils/format'
-import { Skeleton } from '@/ui-components/skeleton'
+import { Edit, Trash2 } from 'lucide-react'
+import { useState } from 'react'
 import { toast } from 'sonner'
-import { ResponsiveDialog } from '@/components/responsive-dialog'
-import { useGetServices } from '@/services/services/useGetServices'
 
 export function ServiceList({ onEdit, salonId }) {
     const [serviceToDelete, setServiceToDelete] = useState(null)
@@ -50,7 +50,7 @@ export function ServiceList({ onEdit, salonId }) {
         return (
             <div className="p-8 text-center">
                 <p className="text-muted-foreground">
-                    Aucune prestation n'a été créée pour le moment.
+                    Aucune prestation n&apos;a été créée pour le moment.
                 </p>
             </div>
         )

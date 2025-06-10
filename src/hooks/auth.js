@@ -1,9 +1,9 @@
 'use client'
 
-import useSWR from 'swr'
 import axios from '@/lib/axios'
-import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import useSWR from 'swr'
 
 export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
     const router = useRouter()
@@ -134,6 +134,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
         }
 
         if (middleware === 'auth' && error) logout()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user, error])
 
     return {

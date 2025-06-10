@@ -14,7 +14,7 @@ export const useCreateService = ({ salonId, onSuccess } = {}) => {
             }
             await queryClient.invalidateQueries({
                 queryKey: ['salon', salonId, 'services'],
-                exact: true
+                exact: true,
             })
         },
     })

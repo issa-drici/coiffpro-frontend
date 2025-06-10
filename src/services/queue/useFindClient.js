@@ -1,10 +1,15 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
 import { getQueue } from '@/utils/api-requests'
+import { useQuery } from '@tanstack/react-query'
 
 export function useFindClient(clientId) {
-    const { data, isLoading, isFetching, error } = useQuery({
+    const {
+        data: clientData,
+        isLoading,
+        isFetching,
+        error,
+    } = useQuery({
         queryKey: ['queue', 'client', clientId],
         queryFn: async () => {
             const { data } = await getQueue()
@@ -17,7 +22,7 @@ export function useFindClient(clientId) {
     })
 
     return {
-        data: data?.data,
+        data: clientData?.data,
         isLoading,
         isFetching,
         error,

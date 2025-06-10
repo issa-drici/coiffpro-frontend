@@ -1,33 +1,33 @@
-"use client";
+'use client'
 
-import { ResponsiveDialog } from "@/components/responsive-dialog";
-import { ServiceForm } from "@/features/services/service-form";
-import { ServiceList } from "@/features/services/service-list";
-import { useAuth } from "@/hooks/auth";
-import { Button } from "@/ui-components/button";
-import { Plus } from "lucide-react";
-import { useState } from "react";
+import { ResponsiveDialog } from '@/components/responsive-dialog'
+import { ServiceForm } from '@/features/services/service-form'
+import { ServiceList } from '@/features/services/service-list'
+import { useAuth } from '@/hooks/auth'
+import { Button } from '@/ui-components/button'
+import { Plus } from 'lucide-react'
+import { useState } from 'react'
 
 export function ServicesSheet() {
-    const [isOpen, setIsOpen] = useState(false);
-    const [editingService, setEditingService] = useState(null);
+    const [isOpen, setIsOpen] = useState(false)
+    const [editingService, setEditingService] = useState(null)
 
-    const { user } = useAuth();
+    const { user } = useAuth()
 
     const handleAddClick = () => {
-        setEditingService(null);
-        setIsOpen(true);
-    };
+        setEditingService(null)
+        setIsOpen(true)
+    }
 
     const handleEditClick = service => {
-        setEditingService(service);
-        setIsOpen(true);
-    };
+        setEditingService(service)
+        setIsOpen(true)
+    }
 
     const handleFormClose = () => {
-        setIsOpen(false);
-        setEditingService(null);
-    };
+        setIsOpen(false)
+        setEditingService(null)
+    }
 
     return (
         <div className="container mx-auto py-4 px-4 md:px-6">
@@ -53,8 +53,8 @@ export function ServicesSheet() {
                 onOpenChange={handleFormClose}
                 title={
                     editingService
-                        ? "Modifier la prestation"
-                        : "Nouvelle prestation"
+                        ? 'Modifier la prestation'
+                        : 'Nouvelle prestation'
                 }
                 size="default"
                 side="bottom">
@@ -66,5 +66,5 @@ export function ServicesSheet() {
                 />
             </ResponsiveDialog>
         </div>
-    );
+    )
 }

@@ -7,7 +7,7 @@ export const useCreateQueueClient = ({ onSuccess } = {}) => {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: (newClient) => createQueueClient(newClient),
+        mutationFn: newClient => createQueueClient(newClient),
         onSuccess: (...args) => {
             if (onSuccess) {
                 onSuccess(...args)

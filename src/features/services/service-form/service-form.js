@@ -1,22 +1,22 @@
 'use client'
 
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
+import { useCreateService } from '@/services/services/use-create-service'
+import { useUpdateService } from '@/services/services/use-update-service'
 import { Button } from '@/ui-components/button'
 import {
     Form,
     FormControl,
+    FormDescription,
     FormField,
     FormItem,
     FormLabel,
     FormMessage,
-    FormDescription,
 } from '@/ui-components/form'
 import { Input } from '@/ui-components/input'
-import { useCreateService } from '@/services/services/use-create-service'
-import { useUpdateService } from '@/services/services/use-update-service'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import * as z from 'zod'
 
 const serviceSchema = z.object({
     name: z.string().min(1, 'Le nom est requis'),

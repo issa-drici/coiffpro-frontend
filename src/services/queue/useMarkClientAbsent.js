@@ -8,7 +8,7 @@ export const useMarkClientAbsent = ({ onSuccess } = {}) => {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: (clientId) => markClientAbsent(clientId),
+        mutationFn: clientId => markClientAbsent(clientId),
         onSuccess: async (...args) => {
             if (onSuccess) {
                 onSuccess(...args)

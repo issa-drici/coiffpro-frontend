@@ -5,8 +5,8 @@ import {
     SidebarGroup,
     SidebarGroupContent,
     SidebarMenu,
-    SidebarMenuItem,
     SidebarMenuButton,
+    SidebarMenuItem,
 } from '@/ui-components/sidebar'
 import { usePathname } from 'next/navigation'
 
@@ -28,7 +28,7 @@ export function NavMain({ items }) {
                             asChild>
                             <Link href="/admin/queue">
                                 <IconEye />
-                                <span>Liste d'attente du jour</span>
+                                <span>Liste d&apos;attente du jour</span>
                             </Link>
                         </SidebarMenuButton>
                         {/* <Button
