@@ -3,6 +3,7 @@ import {
     IconChartBar,
     IconFileAi,
     IconFileDescription,
+    IconFileSpark,
     IconHelp,
     IconListDetails,
     IconRazorElectric,
@@ -11,6 +12,7 @@ import {
 import { NavMain } from '@/components/nav-main'
 import { NavSecondary } from '@/components/nav-secondary'
 import { NavUser } from '@/components/nav-user'
+import { useAuth } from '@/hooks/auth'
 import {
     Sidebar,
     SidebarContent,
@@ -20,7 +22,6 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/ui-components/sidebar'
-import { useAuth } from '@/hooks/auth'
 import Link from 'next/link'
 
 const data = {
@@ -44,6 +45,11 @@ const data = {
             title: "Liste d'attente",
             url: '/admin/queue',
             icon: IconChartBar,
+        },
+        {
+            title: 'Support Inscription',
+            url: '/admin/support-inscription',
+            icon: IconFileSpark,
         },
         // {
         //     title: 'Coiffeurs',
