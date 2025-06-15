@@ -1,14 +1,13 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { format, format as formatDate } from 'date-fns'
-import { fr } from 'date-fns/locale'
-import { Timer, UserCheck, MapPin, Phone } from 'lucide-react'
-import { Skeleton } from '@/ui-components/skeleton'
-import { Alert, AlertDescription } from '@/ui-components/alert'
-import { AlertCircle } from 'lucide-react'
-import { useFindSalonInfo } from '@/services/salon/use-find-salon-info'
 import { useFindQueueClient } from '@/services/queue/use-find-queue-client'
+import { useFindSalonInfo } from '@/services/salon/use-find-salon-info'
+import { Alert, AlertDescription } from '@/ui-components/alert'
+import { Skeleton } from '@/ui-components/skeleton'
+import { differenceInMinutes, format, format as formatDate } from 'date-fns'
+import { fr } from 'date-fns/locale'
+import { AlertCircle, MapPin, Phone, Timer, UserCheck } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 function useCountdown(targetDate) {
     const [timeLeft, setTimeLeft] = useState(null)
@@ -91,7 +90,18 @@ export function QueueClientInfo({ queueClientId, salonId }) {
     }
 
     const formatTime = dateString => {
-        return format(new Date(dateString), 'HH:mm', { locale: fr })
+        if (!dateString) return '--:--'
+
+        const now = new Date()
+        const estimatedTime = new Date(dateString)
+        const diffInMinutes = Math.abs(differenceInMinutes(estimatedTime, now))
+
+        // Si l'heure estimée est dans les 5 minutes de l'heure actuelle, afficher "Maintenant"
+        if (diffInMinutes <= 5) {
+            return 'Maintenant'
+        }
+
+        return format(estimatedTime, 'HH:mm', { locale: fr })
     }
 
     const formatDay = dateString => {
@@ -160,22 +170,22 @@ export function QueueClientInfo({ queueClientId, salonId }) {
                     <div className="flex items-start gap-2">
                         <MapPin className="h-4 w-4 mt-1 text-muted-foreground" />
                         <div>
-                            <div className="font-medium">{salon.name}</div>
+                            <div className="font-medium">{salon?.name}</div>
                             <a
-                                href={`https://www.google.fr/maps/search/${encodeURIComponent(salon.address)}`}
+                                href={`https://www.google.fr/maps/search/${encodeURIComponent(salon?.address)}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-sm text-primary hover:underline">
-                                {salon.address}
+                                {salon?.address}
                             </a>
                         </div>
                     </div>
                     <div className="flex items-center gap-2 mt-3">
                         <Phone className="h-4 w-4 text-muted-foreground" />
                         <a
-                            href={`tel:${salon.phone}`}
+                            href={`tel:${salon?.phone}`}
                             className="text-primary hover:underline">
-                            {salon.phone}
+                            {salon?.phone}
                         </a>
                     </div>
                 </div>

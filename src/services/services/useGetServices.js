@@ -1,7 +1,7 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
 import { getSalonServices } from '@/utils/api-requests'
+import { useQuery } from '@tanstack/react-query'
 
 export function useGetServices(salonId) {
     return useQuery({
@@ -9,5 +9,6 @@ export function useGetServices(salonId) {
         queryFn: () => getSalonServices(salonId),
         enabled: !!salonId, // La requête ne s'exécute que si salonId est défini
         staleTime: 1000 * 60 * 5, // 5 minutes
+        refetchOnWindowFocus: true,
     })
 }

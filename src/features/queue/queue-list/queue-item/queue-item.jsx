@@ -1,16 +1,16 @@
 'use client'
 
-import { format, differenceInMinutes } from 'date-fns'
-import { fr } from 'date-fns/locale'
+import { ResponsiveDialog } from '@/components/responsive-dialog'
 import { QueueStatusBadge } from '@/features/queue/queue-list/queue-item/queue-status-badge'
+import { useMarkClientAbsent } from '@/services/queue/useMarkClientAbsent'
+import { useTakeClient } from '@/services/queue/useTakeClient'
+import { useFindServiceConfig } from '@/services/services/use-find-service-config'
 import { Button } from '@/ui-components/button'
 import { Card, CardContent } from '@/ui-components/card'
+import { differenceInMinutes, format } from 'date-fns'
+import { fr } from 'date-fns/locale'
 import { Clock, Phone, Scissors, Timer, User } from 'lucide-react'
-import { useTakeClient } from '@/services/queue/useTakeClient'
-import { useMarkClientAbsent } from '@/services/queue/useMarkClientAbsent'
 import { useState } from 'react'
-import { useFindServiceConfig } from '@/services/services/use-find-service-config'
-import { ResponsiveDialog } from '@/components/responsive-dialog'
 
 export function QueueItem({ client, isCurrentClient = false }) {
     const { mutate: handleTakeClient, isLoading: isTakingClient } =
@@ -28,8 +28,18 @@ export function QueueItem({ client, isCurrentClient = false }) {
     }
 
     const getEstimatedWaitTime = () => {
+        if (!client.estimatedTime) {
+            return 0
+        }
+
         const now = new Date()
         const estimatedTime = new Date(client.estimatedTime)
+
+        // Vérifier si la date est valide
+        if (isNaN(estimatedTime.getTime())) {
+            return 0
+        }
+
         const waitTime = differenceInMinutes(estimatedTime, now)
         return Math.max(0, waitTime)
     }
@@ -190,7 +200,8 @@ export function QueueItem({ client, isCurrentClient = false }) {
                                     Passage prévu
                                 </div>
                                 <div className="text-lg font-semibold">
-                                    {formatTime(client.estimatedTime)}
+                                    {client.estimatedTime &&
+                                        formatTime(client.estimatedTime)}
                                 </div>
                             </div>
                             <div>
@@ -199,7 +210,9 @@ export function QueueItem({ client, isCurrentClient = false }) {
                                     Temps restant
                                 </div>
                                 <div className="text-lg font-semibold">
-                                    {estimatedWaitTime} min
+                                    {estimatedWaitTime > 0
+                                        ? `${estimatedWaitTime} min`
+                                        : 'Maintenant'}
                                 </div>
                             </div>
                         </div>
@@ -284,13 +297,13 @@ export function QueueItem({ client, isCurrentClient = false }) {
                 className=" p-0 cursor-pointer"
                 onClick={() => setOpenDetailsDialog(true)}>
                 <CardContent className="p-0">
-                    <div className="flex items-center w-full">
+                    <div className="flex  w-full h-full">
                         {/* Numéro ticket */}
-                        <div className="flex items-center justify-center bg-primary/10 text-primary font-mono font-bold text-lg rounded-md rounded-r-none w-16 h-16 mr-3">
+                        <div className="flex items-center justify-center bg-primary/10 text-primary font-mono font-bold text-lg rounded-md rounded-r-none w-16 h-full mr-3">
                             {('00' + client.ticket_number).slice(-2)}
                         </div>
                         {/* Infos principales */}
-                        <div className="flex-1 min-w-0 p-1">
+                        <div className="flex-1 min-w-0 p-2">
                             <div className="font-bold text-base truncate">
                                 {client.client.firstName}
                             </div>
@@ -305,12 +318,15 @@ export function QueueItem({ client, isCurrentClient = false }) {
                             </div>
                         </div>
                         {/* Heure et durée */}
-                        <div className="flex flex-col items-end min-w-[64px] ml-3 px-4">
+                        <div className="flex flex-col items-end pr-4 py-1">
                             <span className="font-bold text-lg">
-                                {formatTime(client.estimatedTime)}
+                                {client.estimatedTime &&
+                                    formatTime(client.estimatedTime)}
                             </span>
                             <span className="text-xs text-muted-foreground">
-                                {totalDuration} min
+                                {estimatedWaitTime > 0
+                                    ? `${estimatedWaitTime} min`
+                                    : 'Maintenant'}
                             </span>
                         </div>
                     </div>

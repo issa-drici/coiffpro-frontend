@@ -8,13 +8,42 @@ import { AlertCircle } from 'lucide-react'
 import { ActiveClient } from '@/features/queue/queue-list/active-client'
 import { SwitchWorking } from '@/features/queue/queue-list/switch-working'
 import { useAuth } from '@/hooks/auth'
+import { useMoveToNextQueueClientBySalonId } from '@/services/queue/move-to-next-queueClient-by-salonId'
 import { useFindAbsentQueueBySalonId } from '@/services/queue/use-find-absent-queue-by-salonId'
 import { useFindCurrentQueueClientBySalonId } from '@/services/queue/use-find-current-queueClient-by-salonId'
 import { useFindEndedQueueBySalonId } from '@/services/queue/use-find-ended-queue-by-salonId'
 import { useFindWaitingQueueBySalonId } from '@/services/queue/use-find-waiting-queue-by-salonId'
 import { Button } from '@/ui-components/button'
+import { useEffect, useState } from 'react'
 
 export function QueueList({ salonId }) {
+    const [currentTime, setCurrentTime] = useState(new Date())
+
+    // Mettre à jour l'heure actuelle toutes les secondes
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentTime(new Date())
+        }, 1000)
+        return () => clearInterval(interval)
+    }, [])
+
+    // Formater le temps écoulé depuis une date
+    const formatTimeElapsed = dateString => {
+        if (!dateString) return ''
+
+        const startTime = new Date(dateString)
+        const elapsedMs = currentTime - startTime
+        const elapsedMinutes = Math.ceil(elapsedMs / (1000 * 60)) // Arrondir à la minute supérieure
+
+        if (elapsedMinutes < 60) {
+            return `${elapsedMinutes} min`
+        } else {
+            const hours = Math.floor(elapsedMinutes / 60)
+            const minutes = elapsedMinutes % 60
+            return `${hours}h${minutes > 0 ? ` ${minutes}min` : ''}`
+        }
+    }
+
     const {
         data: currentQueueData,
         isLoading: isCurrentQueueLoading,
@@ -38,6 +67,10 @@ export function QueueList({ salonId }) {
         isLoading: isAbsentQueueLoading,
         error: absentQueueError,
     } = useFindAbsentQueueBySalonId(salonId)
+
+    const { mutate: moveToNextQueueClient } = useMoveToNextQueueClientBySalonId(
+        { salonId },
+    )
 
     const { user } = useAuth()
 
@@ -84,28 +117,33 @@ export function QueueList({ salonId }) {
         <div className="space-y-6">
             <div className="flex justify-between items-center w-full">
                 <div className="flex flex-col w-full">
-                    <div className="text-xl font-bold">{user?.salon?.name}</div>
+                    <div className="text-xl font-bold">{user?.firstName}</div>
                     <div className="text-md text-muted-foreground font-normal">
-                        Non démarré
+                        {user?.barber?.is_active
+                            ? 'En service depuis ' +
+                              formatTimeElapsed(
+                                  user?.barber?.is_active_changed_at,
+                              )
+                            : 'Non démarré'}
                     </div>
                 </div>
-                <SwitchWorking salonId={salonId} />
+                <SwitchWorking barber={user?.barber} salon={user?.salon} />
             </div>
-
             {currentQueueData?.current_client && (
                 <ActiveClient queueClient={currentQueueData?.current_client} />
             )}
-
-            {currentQueueData?.current_client ? (
-                <Button className="w-full">Terminer</Button>
-            ) : (
-                <Button className="w-full">Commencer</Button>
-            )}
-
+            <Button
+                disabled={
+                    !user?.barber?.is_active ||
+                    waitingQueueData?.clients?.length < 1
+                }
+                className="w-full"
+                onClick={moveToNextQueueClient}>
+                {currentQueueData?.current_client ? 'Terminer' : 'Commencer'}
+            </Button>
             <div className="font-semibold">
                 En attente • {waitingQueueData?.clients?.length}
             </div>
-
             {waitingQueueData?.clients?.length === 0 ? (
                 <Alert>
                     <AlertDescription>
@@ -119,7 +157,6 @@ export function QueueList({ salonId }) {
                     ))}
                 </div>
             )}
-
             <div className="font-semibold">
                 Terminé • {endedQueueData?.clients?.length}
             </div>
@@ -136,11 +173,9 @@ export function QueueList({ salonId }) {
                     ))}
                 </div>
             )}
-
             <div className="font-semibold">
                 Absent • {absentQueueData?.clients?.length}
             </div>
-
             {absentQueueData?.clients?.length === 0 ? (
                 <Alert>
                     <AlertDescription>Aucun client absent.</AlertDescription>

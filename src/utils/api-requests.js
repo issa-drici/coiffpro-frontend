@@ -232,3 +232,39 @@ export async function getQueueClient(queueClientId) {
     const response = await axios.get(`/api/queue-client/${queueClientId}`)
     return response.data
 }
+
+/**
+ * Déplace le client suivant dans la file d'attente
+ * @param {string} salonId - ID du salon
+ * @returns {Promise<{data: QueueClient}>}
+ */
+export async function moveToNextQueueClientBySalonId(salonId) {
+    const response = await axios.post(`/api/queue/next/${salonId}`)
+    return response.data
+}
+
+/**
+ * Toggle le statut d'un barbier
+ * @param {string} barberId - ID du barbier
+ * @returns {Promise<{data: Barber}>}
+ */
+export async function toggleBarberStatus(barberId) {
+    const response = await axios.patch(`/api/barbers/${barberId}/toggle-status`)
+    return response.data
+}
+
+/**
+ * Génère et télécharge le QR code PDF pour le salon
+ * @param {string} salonId - ID du salon
+ * @returns {Promise<Blob>}
+ */
+export async function generateQRCodePDF(salonId) {
+    const response = await axios.post(
+        `/api/generate-qrcode-pdf`,
+        { salonId },
+        {
+            responseType: 'blob', // Important pour recevoir le fichier PDF
+        },
+    )
+    return response.data // Retourner juste le blob
+}
